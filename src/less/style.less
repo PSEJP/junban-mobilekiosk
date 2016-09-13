@@ -1,0 +1,85 @@
+/**
+*   in build
+*/
+* {
+    transition: all 0.3s linear;
+}
+
+/**
+*   Preset
+*/
+html, body {
+    overflow-x: hidden;
+}
+
+/**
+*   Mixin
+*/
+.aspect-ratio(@width, @height) {
+    position: relative;
+
+    &:before {
+        display: block;
+        content: "";
+        width: 100%;
+        padding-top: (@height / @width) * 100%;
+    }
+    > .content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        padding-right: 15px;
+        padding-left: 15px;
+        width: 100%;
+        color: #fff;
+    }
+}
+
+/**
+*   Style
+*/
+.container-fluid {
+    padding-right: 0;
+    padding-left: 0;
+    margin-bottom: 10px;
+}
+.container-16-9 {
+    .aspect-ratio(16,9);
+    background: #ffab40;
+    top: 0px;
+}
+.container-16-4 {
+    .aspect-ratio(16,4);
+    background: #78909c;
+    top: 0px;
+}
+.container-16-3 {
+    .aspect-ratio(16,3);
+    background: #ffbf6d;
+    top: 0px;
+}
+/**
+*   Font
+*/
+p {
+    color: #37474f;
+}
+.font {
+    &-brand {
+        font-size: 1.4em;
+        text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
+    }
+    &-counter {
+        font-size: 2.3em;
+        line-height: 1em;
+        padding-top: 24px;
+        text-align: left;
+    }
+    &-submsg {
+        font-size: 0.8em;
+        color: white;
+        text-align: left;
+    }
+}
+

@@ -1,0 +1,20 @@
+{
+  "name": "junban-mobilekiosk",
+  "authors": [
+    "JohnsonChung <johnson780510@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "normalize-css": "^4.2.0"
+  }
+}
