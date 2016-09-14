@@ -2,7 +2,11 @@
   "name": "junban-mobilekiosk",
   "main": "index.html",
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.4.0"
+    "polymer": "Polymer/polymer#^1.4.0",
+    "iron-elements": "PolymerElements/iron-elements#^1.0.10",
+    "paper-elements": "PolymerElements/paper-elements#^1.0.7",
+    "neon-elements": "PolymerElements/neon-elements#^1.0.0",
+    "app-elements": "PolymerElements/app-elements#^0.10.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
