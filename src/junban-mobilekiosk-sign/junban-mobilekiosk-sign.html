@@ -1,0 +1,142 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<dom-module id="junban-mobilekiosk-sign">
+    <template>
+        <style>
+            :host {
+                position: fixed;
+                top: 0px;
+                right: 0px;
+                bottom: 0px;
+                left: 0px;
+                outline: 1px solid red;
+            }
+
+            #fixed {
+                position: fixed;
+                top: 0px;
+                right: 0px;
+                bottom: 0px;
+                left: 0px;
+                height: 100%;
+                width: 100%;
+                background-color: orange;
+            }
+
+            #toucharea {
+                position: absolute;
+                top: 6px;
+                right: 6px;
+                bottom: 6px;
+                left: 6px;
+                background-color: white;
+                outline: 1px dashed red;
+            }
+
+            #clearBtn {
+                position: absolute;
+                left: 10px;
+                bottom: 20px;
+                z-index: 99999;
+                outline: var(--paper-grey-200) 1px solid;
+            }
+
+            #submitBtn {
+                position: absolute;
+                right: 10px;
+                bottom: 20px;
+                z-index: 99999;
+                background-color: var(--paper-green-500);
+                color: white;
+            }
+        </style>
+        <div id="fixed"></div>
+        <div id="toucharea"></div>
+        <paper-button id="clearBtn" on-tap="_clearTap">Refresh</paper-button>
+        <paper-button id="submitBtn" on-tap="_submitTap">Submit</paper-button>
+    </template>
+    <script>
+        (function () {
+            'use strict';
+
+            Polymer({
+                is: 'junban-mobilekiosk-sign',
+
+                behaviors: [
+                    Polymer.NeonSharedElementAnimatableBehavior
+                ],
+
+                properties: {
+                    data: {
+                        type: Array,
+                        value: []
+                    },
+
+                    sharedElements: {
+                        type: Object,
+                        value: function () {
+                            return {
+                                'ripple': this.$.fixed
+                            }
+                        }
+                    },
+
+                    animationConfig: {
+                        type: Object,
+                        value: function () {
+                            return {
+                                'entry': [{
+                                    name: 'ripple-animation',
+                                    id: 'ripple',
+                                    toPage: this
+                                }, {
+                                    name: 'transform-animation',
+                                    transformFrom: 'translateY(150vh)',
+                                    transformTo: 'translateY(0vh)',
+                                    node: this.$.toucharea,
+                                    timing: {
+                                        delay: 350
+                                    }
+                                },
+                                    {
+                                        name: 'cascaded-animation',
+                                        animation: 'transform-animation',
+                                        transformFrom: 'translateY(60vh)',
+                                        nodes: [this.$.submitBtn, this.$.clearBtn],
+                                        timing: {
+                                            delay: 500
+                                        }
+                                    }],
+                                'exit': [{
+                                    name: 'fade-out-animation',
+                                    node: this.$.fixed,
+                                    timing: {
+                                        delay: 350
+                                    }
+                                }, {
+                                    name: 'transform-animation',
+                                    transformFrom: 'none',
+                                    transformTo: 'translate(0px,-200vh) scale(0.9,1)',
+                                    node: this.$.toucharea
+                                },
+                                    {
+                                        name: 'cascaded-animation',
+                                        animation: 'transform-animation',
+                                        transformTo: 'translateY(60vh)',
+                                        nodes: [this.$.submitBtn, this.$.clearBtn],
+                                    }]
+                            }
+                        }
+                    }
+                },
+                _submitTap: function () {
+                    this.fire('close-toucharea')
+                },
+                _clearTap: function () {
+                }
+            });
+        })();
+    </script>
+</dom-module>

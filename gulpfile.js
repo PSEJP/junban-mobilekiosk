@@ -1,32 +1,20 @@
 var gulp = require('gulp'),
-    jade = require('gulp-jade'),
     less = require('gulp-less'),
     path = require('path'),
-    bower = require('gulp-bower'),
     plumber = require('gulp-plumber'),
-    browserSync = require('browser-sync').create();
+    bs = require('browser-sync').create();
 
 
 // Static server
-gulp.task('browser-sync', ['less'], function() {
-    browserSync.init({
+gulp.task('browser-sync', function() {
+    bs.init({
         server: {
-            baseDir: "builds/development"
-        }
+            baseDir: "./"
+        },
+        open: false, // Don't open browser on reload
+        notify: true // Show notifications in the browser.
     });
-    gulp.watch("src/less/*.less", ['less']);
-    gulp.watch("src/templates/*.jade", ['jade']);
-});
-
-// jade templates
-gulp.task('jade', function() {
-    return gulp.src('src/templates/**/*.jade')
-        .pipe(plumber())
-        .pipe(jade({
-            pretty: true
-            }))
-        .pipe(gulp.dest('builds/development'))
-        .pipe(browserSync.stream());
+    bs.watch("./src/**/*.html").on("change", bs.reload);
 });
 
 
@@ -38,12 +26,6 @@ gulp.task('less', function () {
             paths: [ path.join(__dirname, 'less', 'includes') ]
             })
         )
-        .pipe(gulp.dest('builds/development/css'))
-        .pipe(browserSync.stream());
-});
-
-// create bower lib
-gulp.task('bower', function() {
-    return bower()
-    .pipe(gulp.dest('builds/development/lib/'));
+        .pipe(gulp.dest('src/css'))
+        .pipe(bs.stream());
 });

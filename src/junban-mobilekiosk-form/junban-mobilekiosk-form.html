@@ -1,0 +1,66 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<dom-module id="junban-mobilekiosk-form">
+    <template>
+        <style>
+            :host {
+                @apply(--layout-vertical);
+                margin: auto 0;
+                padding: 0 0;
+
+            }
+            paper-card {
+                margin-bottom: 8px;
+            }
+        </style>
+        <template is="dom-repeat" items="{{data}}" as="data">
+            <paper-card heading="{{data.question}}">
+                <div class="card-content">
+                    <paper-radio-group class=" layout vertical">
+                    <template is="dom-repeat" items="{{data.choices}}" as="choices">
+                            <paper-radio-button name="{{data.question}}{{index}}">{{choices}}</paper-radio-button>
+                    </template>
+                    </paper-radio-group>
+                </div>
+            </paper-card>
+        </template>
+    </template>
+    <script>
+        (function () {
+            'use strict';
+
+            Polymer({
+                is: 'junban-mobilekiosk-form',
+
+                properties: {
+                    data: {
+                        type: Array,
+                        value: function () {
+                            return [
+                                {
+                                    question: 'questionA',
+                                    choices: ['choice content', 'choice content', 'choice content', 'choice content']
+                                },
+                                {
+                                    question: 'questionB very longggggggggggggggggggg gggggggggg', choices: ['choice content', 'choice content']
+                                },
+                                {
+                                    question: 'questionC',
+                                    choices: ['choice content', 'choice content', 'choice content']
+                                },
+                                {
+                                    question: 'questionD', choices: ['choice content', 'choice content']
+                                }
+                            ]
+                        }
+                    }
+                }
+            });
+        })();
+    </script>
+</dom-module>

@@ -1,0 +1,6 @@
+{
+  "name": "junban-mobilekiosk",
+  "short_name": "junban-mobilekiosk",
+  "start_url": "/",
+  "display": "standalone"
+}
