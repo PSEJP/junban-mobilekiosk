@@ -28,6 +28,32 @@
     </style>
 </head>
 <body class="fullbleed">
-    <junban-mobilekiosk></junban-mobilekiosk>
+    <template id="scope" is="dom-bind">
+        <junban-mobilekiosk data="{{data}}"></junban-mobilekiosk>
+    </template>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var scope = document.querySelector('#scope');
+
+
+            scope.data = [
+                {
+                    question: 'questionA',
+                    choices: ['choice content', 'choice content', 'choice content', 'choice content']
+                },
+                {
+                    question: 'questionB very longggggggggggggggggggg gggggggggg', choices: ['choice content', 'choice content']
+                },
+                {
+                    question: 'questionC',
+                    choices: ['choice content', 'choice content', 'choice content']
+                },
+                {
+                    question: 'questionD', choices: ['choice content', 'choice content']
+                }
+            ];
+            console.log('data ready');
+        });
+    </script>
 </body>
 </html>
