@@ -55,6 +55,12 @@
                 color: white;
                 will-change: transform;
             }
+
+            /* not fully support*/
+            @viewport {
+                orientation: portrait;
+            }
+
             /* For portrait, we want the sign area keep landscape view */
 
             @media screen and (orientation: portrait) {
@@ -167,7 +173,8 @@
                     }
                 },
                 _submitTap: function () {
-                    this.fire('close-toucharea')
+                    this.fire('close-toucharea');
+                    this.set('data.sign.complete', true )
                 },
                 _clearTap: function () {
                 }
@@ -175,3 +182,4 @@
         })();
     </script>
 </dom-module>
+d
