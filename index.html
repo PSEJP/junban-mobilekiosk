@@ -28,21 +28,30 @@
     </style>
 </head>
 <body class="fullbleed">
-    <template id="scope" is="dom-bind">
-        <junban-mobilekiosk data="{{data}}"></junban-mobilekiosk>
-    </template>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var scope = document.querySelector('#scope');
+<template id="scope" is="dom-bind">
+    <junban-mobilekiosk data="{{data}}"></junban-mobilekiosk>
+</template>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var scope = document.querySelector('#scope');
 
 
-            scope.data = [
+        scope.data = {
+            info: {
+                title: 'よしのや：山崎店',　// 店名
+                counter: 24, // 正在排隊人數
+                content: 'この文章はダミーです。文字の大きさ、量、字間、行間等を確認するために入れています。', // 商店簡介內文
+                action_instruction: 'サインして順番に入ります' // 簽名btn內文
+
+            },
+            form: [
                 {
                     question: 'questionA',
                     choices: ['choice content', 'choice content', 'choice content', 'choice content']
                 },
                 {
-                    question: 'questionB very longggggggggggggggggggg gggggggggg', choices: ['choice content', 'choice content']
+                    question: 'questionB very longggggggggggggggggggg gggggggggg',
+                    choices: ['choice content', 'choice content']
                 },
                 {
                     question: 'questionC',
@@ -50,10 +59,11 @@
                 },
                 {
                     question: 'questionD', choices: ['choice content', 'choice content']
-                }
-            ];
-            console.log('data ready');
-        });
-    </script>
+                }]
+        };
+
+        console.log('data ready');
+    });
+</script>
 </body>
 </html>

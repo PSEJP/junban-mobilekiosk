@@ -139,22 +139,22 @@
                 effects-config='{"resize-snapped-title": {"startsAt": 0.8, "duration": "100ms"}, "fade-background": {"startsAt": 0.8, "endsAt": 0.9}}'>
                 <app-toolbar>
                     <paper-icon-button icon="menu"></paper-icon-button>
-                    <h4 condensed-title>よしのや：山崎店</h4>
+                    <h4 condensed-title>{{data.info.title}}</h4>
                     <paper-icon-button icon="info"></paper-icon-button>
                 </app-toolbar>
-                <div Main-Title>よしのや：山崎店</div>
+                <div Main-Title>{{data.info.title}}</div>
             </app-header>
             <app-toolbar class="info tall layout vertical start">
-                <div counter>24組お待ち</div>
-                <div sub-msg>ただいま「24組」のお客さんはお待ちしております</div>
+                <div counter>{{data.info.counter}}組お待ち</div>
+                <div sub-msg>ただいま「{{data.info.counter}}組」のお客さんはお待ちしております</div>
             </app-toolbar>
             <!-- Layout Content Part-->
             <div content>
                 <!--　簽名部分 -->
                 <paper-card id="signCard">
                     <div class="card-content">
-                        <p>この文章はダミーです。文字の大きさ、量、字間、行間等を確認するために入れています。</p>
-                        <paper-button id="signBtn" class="indigo block" raised on-tap="_openTouchareaTap">サインして順番に入ります
+                        <p>{{data.info.content}}</p>
+                        <paper-button id="signBtn" class="indigo block" raised on-tap="_openTouchareaTap">{{data.info.action_instruction}}
                         </paper-button>
                     </div>
                 </paper-card>
@@ -163,8 +163,7 @@
                 <!-- 送出資料  -->
                 <paper-card>
                     <div class="card-content" heading="提示">
-                        <p>送信ボタンを押すと「よしのや」山崎店の順番に入ります。</p>
-
+                        <p>送信ボタンを押すと「{{data.info.title}}」の順番に入ります。</p>
                     </div>
                     <div class="card-actions layout horizontal end-justified">
                         <paper-button id="submitBtn" class="green" raised>送信</paper-button>
