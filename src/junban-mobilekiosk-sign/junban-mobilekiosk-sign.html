@@ -55,6 +55,33 @@
                 color: white;
                 will-change: transform;
             }
+            /* For portrait, we want the sign area keep landscape view */
+
+            @media screen and (orientation: portrait) {
+
+                #toucharea:before {
+                    position: absolute;
+                    left:0; top:0;
+                    content:'portrait';
+                }
+
+                :host {
+                    transform: rotate(90deg);
+                    transform-origin: 50vw 50vw;
+                    height: 100vw;
+                    width: 100vh;
+                }
+            }
+
+            /* For landscape, we want the sign area work as normal*/
+
+            @media screen and (orientation: landscape) {
+                #toucharea:before {
+                    position: absolute;
+                    left:0; top:0;
+                    content:'landscape';
+                }
+            }
         </style>
         <!-- TODO:要解決的問題
             *) 簽名模式要強制 landscape mode
