@@ -12,6 +12,9 @@
 <link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
 <link rel="import" href="../../bower_components/paper-card/paper-card.html">
 
+<!-- Iron Elements -->
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+
 <!-- Neon -->
 <link rel="import" href="../../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
 
@@ -96,6 +99,10 @@
                 color: white;
             }
 
+            paper-button.grey {
+                background-color: var(--paper-grey-200);
+            }
+
             paper-button.block {
                 display: block;
                 margin: auto 0;
@@ -132,6 +139,8 @@
             }
         </style>
         <app-header-layout id="mainPage">
+
+
             <!-- Layout Header -->
             <app-header
                 condenses fixed
@@ -148,16 +157,30 @@
                 <div counter>{{data.info.counter}}組お待ち</div>
                 <div sub-msg>ただいま「{{data.info.counter}}組」のお客さんはお待ちしております</div>
             </app-toolbar>
+
+
             <!-- Layout Content Part-->
             <div content>
                 <!--　簽名部分 -->
-                <paper-card id="signCard">
-                    <div class="card-content">
-                        <p>{{data.info.content}}</p>
-                        <paper-button id="signBtn" class="indigo block" raised on-tap="_openTouchareaTap">{{data.info.action_instruction}}
-                        </paper-button>
-                    </div>
-                </paper-card>
+                <iron-pages  id="signCardPages" selected="0">
+                    <paper-card id="signCard">
+                        <div class="card-content">
+                            <p>{{data.info.content}}</p>
+                            <paper-button id="signBtn" class="indigo block" raised on-tap="_openTouchareaTap">{{data.info.action_instruction}}</paper-button>
+                        </div>
+                    </paper-card>
+                    <paper-card  id="signCardComplete">
+                        <div class="card-content">
+                            <p>Sign Complete</p>
+                            <svg xmlns="http://www.w3.org/2000/svg" width$="{{data.sign.width}}" height="{{data.sign.height}}" viewBox="0 0 24 24">
+                                <path d$='{{data.sign.signature}}' />
+                            </svg>
+                        </div>
+                        <div class="card-actions layout horizontal end-justified">
+                            <paper-button class="grey" on-tap="_signAgainTap">Sign again</paper-button>
+                        </div>
+                    </paper-card>
+                </iron-pages>
                 <!-- 提問部分 -->
                 <junban-mobilekiosk-form data="{{data}}"></junban-mobilekiosk-form>
                 <!-- 送出資料  -->
@@ -171,6 +194,8 @@
                 </paper-card>
             </div>
             <!--/ end Content Part-->
+
+
         </app-header-layout>
     </template>
     <script>
@@ -182,6 +207,10 @@
 
                 behaviors: [
                     Polymer.NeonSharedElementAnimatableBehavior
+                ],
+
+                observers: [
+                    'signCompleteChanged(data.sign.complete)'
                 ],
 
                 properties: {
@@ -210,8 +239,17 @@
                         }
                     }
                 },
+                signCompleteChanged: function(boolean) {
+                    if(boolean === true) {
+                        this.$.signCardPages.selected = 1;
+                    }
+                },
                 _openTouchareaTap: function () {
                     this.fire('open-toucharea')
+                },
+                _signAgainTap: function() {
+                    this.set('data.sign.complete', false);
+                    this.$.signCardPages.selected = 0;
                 }
             });
         })();
