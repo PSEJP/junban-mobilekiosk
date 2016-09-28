@@ -18,12 +18,12 @@
                 margin-bottom: 8px;
             }
         </style>
-        <template is="dom-repeat" items="{{data.form}}" as="data">
-            <paper-card heading="{{data.question}}">
+        <template is="dom-repeat" items="{{data.form}}" as="form">
+            <paper-card heading="{{form.question}}">
                 <div class="card-content">
-                    <paper-radio-group class=" layout vertical">
-                    <template is="dom-repeat" items="{{data.choices}}" as="choices">
-                            <paper-radio-button name="{{data.question}}{{index}}">{{choices}}</paper-radio-button>
+                    <paper-radio-group class=" layout vertical" selected="{{form.selected}}">
+                    <template is="dom-repeat" items="{{form.choices}}" as="choices">
+                            <paper-radio-button name="{{form.question}}{{index}}">{{choices}}</paper-radio-button>
                     </template>
                     </paper-radio-group>
                 </div>
@@ -42,6 +42,14 @@
                         type: Array,
                         value: []
                     }
+                },
+
+                // for debug 
+                observers: [
+                    'dataChanged(data.form.*)'
+                ],
+                dataChanged: function(v){
+                    console.log(v);
                 }
             });
         })();
