@@ -13,6 +13,11 @@
                 left: 0px;
                 outline: 1px solid red;
             }
+            #container {
+                position: relative;
+                height: 100%;
+                width: 100%;
+            }
 
             #fixed {
                 position: fixed;
@@ -71,7 +76,7 @@
                     content:'portrait';
                 }
 
-                :host {
+                #container {
                     transform: rotate(90deg);
                     transform-origin: 50vw 50vw;
                     height: 100vw;
@@ -91,12 +96,14 @@
         </style>
         <!-- TODO:要解決的問題
             *) 簽名模式要強制 landscape mode
-            *) chrome 在瀏覽器上部向下滑動會跑出重整泡泡
+            *) 簽名時 chrome 在瀏覽器上部向下滑動會跑出重整泡泡
         -->
-        <div id="fixed"></div>
-        <div id="toucharea"></div>
-        <paper-button id="clearBtn" on-tap="_clearTap">Refresh</paper-button>
-        <paper-button id="submitBtn" on-tap="_submitTap">Submit</paper-button>
+        <div id="container">
+            <div id="fixed"></div>
+            <div id="toucharea"></div>
+            <paper-button id="clearBtn" on-tap="_clearTap">Refresh</paper-button>
+            <paper-button id="submitBtn" on-tap="_submitTap">Submit</paper-button>
+        </div>
     </template>
     <script>
         (function () {
