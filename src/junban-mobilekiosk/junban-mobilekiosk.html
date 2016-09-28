@@ -5,7 +5,7 @@
 
 <!-- User -->
 <link rel="import" href="../junban-mobilekiosk-sign/junban-mobilekiosk-sign.html">
-<link rel="import" href="../mobilekiosk-layout/mobilekiosk-layout.html">
+<link rel="import" href="../junban-mobilekiosk-layout/junban-mobilekiosk-layout.html">
 
 <dom-module id="junban-mobilekiosk">
     <template>
@@ -18,7 +18,7 @@
         <!-- default to use body scroller -->
 
         <neon-animated-pages id="pages" selected="0">
-            <mobilekiosk-layout data="{{data}}" on-open-toucharea="_openTouchareaTap"></mobilekiosk-layout>
+            <junban-mobilekiosk-layout data="{{data}}" on-open-toucharea="_openTouchareaTap"></junban-mobilekiosk-layout>
             <junban-mobilekiosk-sign on-close-toucharea="_closeTouchareaTap"></junban-mobilekiosk-sign>
         </neon-animated-pages>
     </template>
