@@ -1,5 +1,9 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<!-- Iron -->
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+
+<!-- Paper -->
 <link rel="import" href="../../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../../bower_components/paper-radio-group/paper-radio-group.html">
@@ -14,21 +18,52 @@
                 padding: 0 0;
 
             }
+
             paper-card {
+                width: 100%;
                 margin-bottom: 8px;
             }
+
+            paper-button.green {
+                background-color: var(--paper-green-500);
+                color: white;
+            }
+
+            #submitBtn {
+                padding-left: 60px;
+                padding-right: 60px;
+            }
+
         </style>
-        <template is="dom-repeat" items="{{data.form}}" as="form">
-            <paper-card heading="{{form.question}}">
-                <div class="card-content">
-                    <paper-radio-group class=" layout vertical" selected="{{form.selected}}">
-                    <template is="dom-repeat" items="{{form.choices}}" as="choices">
-                            <paper-radio-button name="{{form.question}}{{index}}">{{choices}}</paper-radio-button>
-                    </template>
-                    </paper-radio-group>
+        <form is="iron-form" id="form" method="post" action="">
+            <template is="dom-repeat" items="{{data.form}}" as="form">
+                <paper-card heading="{{form.question}}">
+                    <div class="card-content">
+                         <!--! TODO: data validation 還在 github PR
+                         臨時解法
+                         http://stackoverflow.com/questions/38003624/how-to-enforce-required-paper-radio-group-in-polymer
+                         -->
+
+
+                        <paper-radio-group class=" layout vertical" selected="{{form.selected}}">
+                            <template is="dom-repeat" items="{{form.choices}}" as="choices">
+                                <paper-radio-button name="{{choices}}">{{choices}}</paper-radio-button>
+                            </template>
+                        </paper-radio-group>
+                    </div>
+                </paper-card>
+            </template>
+
+            <!-- 送出資料  -->
+            <paper-card>
+                <div class="card-content" heading="提示">
+                    <p>送信ボタンを押すと「{{data.info.title}}」の順番に入ります。</p>
+                </div>
+                <div class="card-actions layout horizontal end-justified">
+                    <paper-button id="submitBtn" class="green" on-tap="_submitForm" raised>送信</paper-button>
                 </div>
             </paper-card>
-        </template>
+        </form>
     </template>
     <script>
         (function () {
@@ -48,8 +83,11 @@
                 observers: [
                     'dataChanged(data.form.*)'
                 ],
-                dataChanged: function(v){
+                dataChanged: function (v) {
                     console.log(v);
+                },
+                _submitForm: function() {
+                    this.$.form.submit();
                 }
             });
         })();

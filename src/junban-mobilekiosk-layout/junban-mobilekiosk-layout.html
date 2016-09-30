@@ -95,11 +95,6 @@
                 color: white;
             }
 
-            paper-button.green {
-                background-color: var(--paper-green-500);
-                color: white;
-            }
-
             paper-button.grey {
                 background-color: var(--paper-grey-200);
             }
@@ -108,14 +103,6 @@
                 display: block;
                 margin: auto 0;
                 text-align: center;
-            }
-
-            #signBtn {
-
-            }
-            #submitBtn {
-                padding-left: 60px;
-                padding-right: 60px;
             }
 
             [main-title] {
@@ -184,15 +171,6 @@
                 </iron-pages>
                 <!-- 提問部分 -->
                 <junban-mobilekiosk-form data="{{data}}"></junban-mobilekiosk-form>
-                <!-- 送出資料  -->
-                <paper-card>
-                    <div class="card-content" heading="提示">
-                        <p>送信ボタンを押すと「{{data.info.title}}」の順番に入ります。</p>
-                    </div>
-                    <div class="card-actions layout horizontal end-justified">
-                        <paper-button id="submitBtn" class="green" raised>送信</paper-button>
-                    </div>
-                </paper-card>
             </div>
             <!--/ end Content Part-->
 
