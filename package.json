@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/PSEJP/junban-mobilekiosk/issues"
   },
-  "homepage": "https://github.com/PSEJP/junban-mobilekiosk#readme"
+  "homepage": "https://github.com/PSEJP/junban-mobilekiosk#readme",
+  "devDependencies": {
+    "browser-sync": "^2.16.0",
+    "gulp": "^3.9.1",
+    "gulp-less": "^3.1.0",
+    "gulp-plumber": "^1.1.0"
+  }
 }
