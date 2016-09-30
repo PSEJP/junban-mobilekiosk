@@ -61,11 +61,6 @@
                 will-change: transform;
             }
 
-            /* not fully support*/
-            @viewport {
-                orientation: portrait;
-            }
-
             /* For portrait, we want the sign area keep landscape view */
 
             @media screen and (orientation: portrait) {
@@ -77,10 +72,17 @@
                 }
 
                 #container {
+                    /* decrypt
                     transform: rotate(90deg);
                     transform-origin: 50vw 50vw;
-                    height: 100vw;
-                    width: 100vh;
+                    */
+                    height: 100vh;
+                    width: 100vw;
+                }
+                #toucharea {
+                    width: calc(100vw - 12px) ;
+                    height: calc( 100 / 16 * 9vw);
+                    top: 50vw;
                 }
             }
 
