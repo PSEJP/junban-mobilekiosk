@@ -7,6 +7,7 @@
 <link rel="import" href="../../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../../bower_components/paper-radio-button/paper-radio-button.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 
 <dom-module id="junban-mobilekiosk-form">
@@ -29,25 +30,43 @@
                 color: white;
             }
 
+            paper-radio-button[invalid]  {
+                --paper-radio-button-checked-color: var(--paper-red-500);
+                --paper-radio-button-checked-ink-color: var(--paper-red-500);
+                --paper-radio-button-unchecked-color: var(--paper-red-900);
+                --paper-radio-button-unchecked-ink-color: var(--paper-red-900);
+                --paper-radio-button-label-color: var(--paper-red-500);
+            }
+            paper-radio-button[invalid]:last-of-type:after {
+                content: ' you must pick one radio button';
+                display: block;
+                font-size: 14px;
+                color: var(--paper-red-500);
+                padding: 1em 0 0 0;
+            }
             #submitBtn {
                 padding-left: 60px;
                 padding-right: 60px;
             }
 
         </style>
-        <form is="iron-form" id="form" method="post" action="">
+        <form is="iron-form"
+              id="form"
+              method="post"
+              on-iron-form-invalid="_formInvalid"
+              action="">
             <template is="dom-repeat" items="{{data.form}}" as="form">
                 <paper-card heading="{{form.question}}">
                     <div class="card-content">
-                         <!--! TODO: data validation 還在 github PR
-                         臨時解法
+                         <!--! TODO: 關於 iron-form 的問題 https://github.com/PolymerElements/paper-radio-group/issues/32
+                         臨時解法 (?
                          http://stackoverflow.com/questions/38003624/how-to-enforce-required-paper-radio-group-in-polymer
                          -->
-
-
-                        <paper-radio-group class=" layout vertical" selected="{{form.selected}}">
+                        <paper-radio-group
+                            class=" layout vertical"
+                            selected="{{form.selected}}">
                             <template is="dom-repeat" items="{{form.choices}}" as="choices">
-                                <paper-radio-button name="{{choices}}">{{choices}}</paper-radio-button>
+                                <paper-radio-button name="{{choices}}" required$="{{!form.selected}}">{{choices}}</paper-radio-button>
                             </template>
                         </paper-radio-group>
                     </div>
@@ -86,8 +105,15 @@
                 dataChanged: function (v) {
                     console.log(v);
                 },
+
+                // Form Validation
+
                 _submitForm: function() {
                     this.$.form.submit();
+                    this.updateStyles();
+                },
+                _formInvalid: function() {
+                    console.log('Form invalid.');
                 }
             });
         })();
