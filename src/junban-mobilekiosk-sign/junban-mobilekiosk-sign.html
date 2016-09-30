@@ -1,6 +1,8 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
+<script src="../../node_modules/signature-mark/build/signature-mark.js"></script>
 
 <dom-module id="junban-mobilekiosk-sign">
     <template>
@@ -64,13 +66,6 @@
             /* For portrait, we want the sign area keep landscape view */
 
             @media screen and (orientation: portrait) {
-
-                #toucharea:before {
-                    position: absolute;
-                    left:0; top:0;
-                    content:'portrait';
-                }
-
                 #container {
                     /* decrypt
                     transform: rotate(90deg);
@@ -89,11 +84,6 @@
             /* For landscape, we want the sign area work as normal*/
 
             @media screen and (orientation: landscape) {
-                #toucharea:before {
-                    position: absolute;
-                    left:0; top:0;
-                    content:'landscape';
-                }
             }
         </style>
         <!-- TODO:要解決的問題
@@ -103,7 +93,8 @@
 
         <div id="fixed"></div>
         <div id="container">
-            <div id="toucharea"></div>
+            <div id="toucharea">
+            </div>
             <paper-button id="clearBtn" on-tap="_clearTap">Refresh</paper-button>
             <paper-button id="submitBtn" on-tap="_submitTap">Submit</paper-button>
         </div>
@@ -116,8 +107,13 @@
                 is: 'junban-mobilekiosk-sign',
 
                 behaviors: [
-                    Polymer.NeonSharedElementAnimatableBehavior
+                    Polymer.NeonSharedElementAnimatableBehavior,
+                    Polymer.IronResizableBehavior
                 ],
+
+                listeners: {
+                    'iron-resize': '_onIronResize'
+                },
 
                 properties: {
                     data: {
@@ -180,13 +176,31 @@
                                     }]
                             }
                         }
-                    }
+                    },
+
+                    signatureMark: Object
                 },
                 _submitTap: function () {
                     this.fire('close-toucharea');
                     this.set('data.sign.complete', true )
                 },
                 _clearTap: function () {
+                },
+                _onIronResize: function () {
+                    this._resetCanvas();
+                },
+                _resetCanvas: function() {
+                    if (this.signatureMark) {
+                        this.signatureMark.destroy();
+                        this.$.toucharea.removeChild(this.signatureMark.canvas);
+                    }
+
+                    var canvas = document.createElement('canvas');
+                    canvas.id = 'signatureCanvas';
+                    canvas.width = this.$.toucharea.offsetWidth;
+                    canvas.height = this.$.toucharea.offsetHeight;
+                    this.$.toucharea.appendChild(canvas);
+                    this.signatureMark = SignatureMark(canvas);
                 }
             });
         })();
