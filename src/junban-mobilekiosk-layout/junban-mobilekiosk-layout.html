@@ -105,6 +105,10 @@
                 text-align: center;
             }
 
+            #signature {
+                max-width: 100%;
+            }
+
             [main-title] {
                 font-weight: 300;
                 position: absolute;
@@ -159,9 +163,7 @@
                     <paper-card  id="signCardComplete">
                         <div class="card-content">
                             <p>Sign Complete</p>
-                            <svg xmlns="http://www.w3.org/2000/svg" width$="{{data.sign.width}}" height="{{data.sign.height}}" viewBox="0 0 24 24">
-                                <path d$='{{data.sign.signature}}' />
-                            </svg>
+                            <img id="signature" src$="{{data.sign.signature}}" alt="">
                         </div>
                         <div class="card-actions layout horizontal end-justified">
                             <paper-button class="grey" on-tap="_signAgainTap">Sign again</paper-button>
