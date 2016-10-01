@@ -64,9 +64,15 @@
                          -->
                         <paper-radio-group
                             class=" layout vertical"
-                            selected="{{form.selected}}">
+                            selected="{{form.selected}}"
+                            on-iron-select="_updateStyles">
                             <template is="dom-repeat" items="{{form.choices}}" as="choices">
-                                <paper-radio-button name="{{choices}}" required$="{{!form.selected}}">{{choices}}</paper-radio-button>
+                                <paper-radio-button
+                                    name="{{choices}}"
+                                    value="{{choices}}"
+                                    required$="{{!form.selected}}">
+                                    {{choices}}
+                                </paper-radio-button>
                             </template>
                         </paper-radio-group>
                     </div>
@@ -114,6 +120,14 @@
                 },
                 _formInvalid: function() {
                     console.log('Form invalid.');
+                },
+                _updateStyles: function(e) {
+                    // TODO: 紅色提示在選擇後要消失
+                    if(e.target.hasAttribute('invalid')) {
+                        this.$.form.validate();
+                    }
+                    console.log(e);
+                    this.updateStyles();
                 }
             });
         })();
