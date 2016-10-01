@@ -62,10 +62,6 @@
                 color: white;
                 will-change: transform;
             }
-            #canvas {
-                width: 100%;
-                height: 100%;
-            }
 
             /* For portrait, we want the sign area keep landscape view */
 
@@ -83,10 +79,6 @@
                     height: calc( 100 / 16 * 9vw);
                     top: 50vw;
                 }
-                #canvas {
-                    width: calc(100vw - 12px) ;
-                    height: calc( 100 / 16 * 9vw);
-                }
             }
 
             /* For landscape, we want the sign area work as normal*/
@@ -102,7 +94,6 @@
         <div id="fixed"></div>
         <div id="container">
             <div id="toucharea">
-                <canvas id="canvas"></canvas>
             </div>
             <paper-button id="clearBtn" on-tap="_clearTap">Refresh</paper-button>
             <paper-button id="submitBtn" on-tap="_submitTap">Submit</paper-button>
@@ -194,19 +185,21 @@
                     this.set('data.sign.complete', true )
                 },
                 _clearTap: function () {
-
                 },
                 _onIronResize: function () {
                     this._resetCanvas();
                 },
                 _resetCanvas: function() {
                     if (this.signatureMark) {
-                        // this.signatureMark.destroy();
-                        // this.$.toucharea.removeChild(this.signatureMark.canvas);
+                        this.signatureMark.destroy();
+                        this.$.toucharea.removeChild(this.signatureMark.canvas);
                     }
-                    var canvas = this.$.canvas;
-                    canvas.height = this.$.toucharea.offsetHeight;
+
+                    var canvas = document.createElement('canvas');
+                    canvas.id = 'signatureCanvas';
                     canvas.width = this.$.toucharea.offsetWidth;
+                    canvas.height = this.$.toucharea.offsetHeight;
+                    this.$.toucharea.appendChild(canvas);
                     this.signatureMark = SignatureMark(canvas);
                 }
             });
