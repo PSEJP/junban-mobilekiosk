@@ -15,6 +15,7 @@
 <!-- Iron Elements -->
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../bower_components/iron-scroll-target-behavior/iron-scroll-target-behavior.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
 
 <!-- Neon -->
 <link rel="import" href="../../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
@@ -163,7 +164,7 @@
                     <paper-card  id="signCardComplete">
                         <div class="card-content">
                             <p>Sign Complete</p>
-                            <img id="signature" src$="{{data.sign.signature}}" alt="">
+                            <img id="signature" src$="{{data.sign.signature}}" />
                         </div>
                         <div class="card-actions layout horizontal end-justified">
                             <paper-button class="grey" on-tap="_signAgainTap">Sign again</paper-button>
@@ -196,8 +197,9 @@
 
                 properties: {
                     data: {
-                        type: Array,
-                        value: []
+                        type: Object,
+                        value: {},
+                        notify: true
                     },
                     sharedElements: {
                         type: Object,
@@ -231,7 +233,7 @@
                 },
                 _signAgainTap: function() {
                     this.set('data.sign.complete', false);
-                    this.$.signCardPages.selected = 0;
+                    this._openTouchareaTap();
                 }
             });
         })();
