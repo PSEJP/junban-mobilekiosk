@@ -181,6 +181,7 @@
                 },
                 _submitTap: function () {
                     this.saveSignature();
+                    this._resetCanvas();
                     this.set('data.sign.signature', this.loadSignature());
                     this.fire('close-toucharea');
                     this.set('data.sign.complete', true )
@@ -205,7 +206,10 @@
                     this.signatureMark = SignatureMark(canvas);
                 },
                 saveSignature: function () {
-                    localStorage.setItem('signature', this._trim(this.signatureMark.canvas).toDataURL('image/png'));
+                    var trimmed = this._trim(this.signatureMark.canvas);
+                    if (trimmed) {
+                        localStorage.setItem('signature', trimmed.toDataURL('image/png'));
+                    }
                 },
                 loadSignature: function () {
                     return localStorage.getItem('signature');
@@ -254,8 +258,13 @@
                     }
 
                     var trimHeight = bound.bottom - bound.top,
-                            trimWidth = bound.right - bound.left,
-                            trimmed = ctx.getImageData(bound.left, bound.top, trimWidth, trimHeight);
+                        trimWidth = bound.right - bound.left;
+
+                    if (!trimWidth || !trimHeight) {
+                        return false;
+                    }
+
+                    var trimmed = ctx.getImageData(bound.left, bound.top, trimWidth, trimHeight);
 
                     copy.canvas.width = trimWidth;
                     copy.canvas.height = trimHeight;
