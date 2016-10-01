@@ -1,0 +1,82 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<!-- Neon -->
+<link rel="import" href="../../bower_components/neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+
+<dom-module id="junban-mobilekiosk-brand-page">
+    <template>
+        <style>
+            :host {
+                @apply(--layout);
+                @apply(--layout-vertical);
+                @apply(--fit);
+                font-size: 0px;
+                line-height: 0px;
+                background-color: orange;
+            }
+            paper-toolbar {
+                --paper-toolbar-background: orange;
+            }
+            #card {
+                font-size: 14px;
+                line-height: 2;
+                margin: 10px;
+                --paper-card-background-color: #fff;
+                --paper-card-content: {
+
+                }
+            }
+            #brand {
+                height: 120px;
+            }
+
+        </style>
+        <paper-toolbar>
+            <paper-icon-button icon="arrow-back" on-tap="_backToTop"></paper-icon-button>
+            <span class="title end-justified ">これは？</span>
+        </paper-toolbar>
+        <paper-card id="card" class="layout vertical">
+            <div class="card-content">
+                <div class="layout vertical">
+                    <div id="brand" class="layout center-center horizontal ">
+                        <img id="logo" src="../img/logo-junban-86.png" alt="順番コンシェル">
+                    </div>
+                    <div>
+                        順番待ちが発生する全ての施設で、簡単に始められる順番管理システム、
+                        それが「順番コンシェル」です。<br>
+                        <br>
+                        制限された店舗というキャパの中で、スタッフの効率的なオペレーションの助けとなり、
+                        お客様の待ち時間を最小限にすることを目標に、
+                        お店のもう一人のスタッフとしてしっかり順番を管理します。<br>
+                        <br>
+                        Copyright © 順番コンシェル All right reserved.
+                    </div>
+                </div>
+            </div>
+        </paper-card>
+    </template>
+
+    <script>
+        Polymer({
+
+            is: 'junban-mobilekiosk-brand-page',
+
+            behaviors: [
+                Polymer.NeonAnimationRunnerBehavior
+            ],
+            properties: {
+                data: {
+                    type: Array,
+                    value: []
+                },
+                animationConfig: {}
+            },
+            _backToTop: function () {
+                this.fire('back-to-top');
+            }
+        });
+    </script>
+</dom-module>

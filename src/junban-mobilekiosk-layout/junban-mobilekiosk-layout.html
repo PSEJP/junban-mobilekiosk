@@ -89,10 +89,10 @@
                 width: 100%;
                 margin-bottom: 8px;
             }
-
             paper-button.indigo {
                 background-color: var(--paper-indigo-500);
                 color: white;
+                will-change: transform;
             }
 
             paper-button.grey {
@@ -140,7 +140,7 @@
                 effects-config='{"resize-snapped-title": {"startsAt": 0.8, "duration": "100ms"}, "fade-background": {"startsAt": 0.8, "endsAt": 0.9}}'>
                 <app-toolbar>
                     <h4 condensed-title>{{data.info.title}}</h4>
-                    <paper-icon-button icon="info"></paper-icon-button>
+                    <paper-icon-button icon="info" on-tap="_openBrandPageTap"></paper-icon-button>
                 </app-toolbar>
                 <div Main-Title>{{data.info.title}}</div>
             </app-header>
@@ -157,7 +157,7 @@
                     <paper-card id="signCard">
                         <div class="card-content">
                             <p>{{data.info.content}}</p>
-                            <paper-button id="signBtn" class="indigo block" raised on-tap="_openTouchareaTap">{{data.info.action_instruction}}</paper-button>
+                            <paper-button id="signBtn" class="indigo block" on-tap="_openTouchareaTap">{{data.info.action_instruction}}</paper-button>
                         </div>
                     </paper-card>
                     <paper-card  id="signCardComplete">
@@ -227,7 +227,10 @@
                     }
                 },
                 _openTouchareaTap: function () {
-                    this.fire('open-toucharea')
+                    this.fire('open-toucharea');
+                },
+                _openBrandPageTap: function() {
+                    this.fire('open-brand-page');
                 },
                 _signAgainTap: function() {
                     this.set('data.sign.complete', false);
