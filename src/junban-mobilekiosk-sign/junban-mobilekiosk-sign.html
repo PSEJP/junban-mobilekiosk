@@ -92,7 +92,7 @@
         <div id="container">
             <div id="toucharea"> </div>
             <paper-button id="clearBtn" on-tap="_clearTap">Refresh</paper-button>
-            <paper-button id="submitBtn" on-transitionend="_submitTap">Submit</paper-button>
+            <paper-button id="submitBtn" on-tap="_submitTap">Submit</paper-button>
         </div>
     </template>
     <script>
@@ -176,9 +176,11 @@
 
                     signatureMark: Object
                 },
-                _submitTap: function () {
-                    this.fire('close-toucharea');
-                    this.set('data.sign.complete', true )
+                _submitTap: function (e) {
+                    e.target.addEventListener('transitionend', function(e) {
+                        this.fire('close-toucharea');
+                        this.set('data.sign.complete', true )
+                    });
                 },
                 _clearTap: function () {
                 },

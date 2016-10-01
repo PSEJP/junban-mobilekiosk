@@ -85,7 +85,7 @@
                     <p>送信ボタンを押すと「{{data.info.title}}」の順番に入ります。</p>
                 </div>
                 <div class="card-actions layout horizontal end-justified">
-                    <paper-button id="submitBtn" class="green" on-tap="_submitForm" raised>送信</paper-button>
+                    <paper-button id="submitBtn" class="green" on-tap="_submitForm">送信</paper-button>
                 </div>
             </paper-card>
         </form>
@@ -114,7 +114,7 @@
 
                 // Form Validation
 
-                _submitForm: function() {
+                _submitForm: function(e) {
                     this.$.form.submit();
                     this.updateStyles();
                 },

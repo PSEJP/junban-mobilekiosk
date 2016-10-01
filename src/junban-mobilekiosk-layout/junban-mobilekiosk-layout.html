@@ -160,7 +160,9 @@
                     <paper-card id="signCard">
                         <div class="card-content">
                             <p>{{data.info.content}}</p>
-                            <paper-button id="signBtn" class="indigo block" on-transitionend="_openTouchareaTap">{{data.info.action_instruction}}</paper-button>
+                        </div>
+                        <div class="card-actions">
+                            <paper-button id="signBtn" class="indigo block" on-tap="_openTouchareaTap">{{data.info.action_instruction}}</paper-button>
                         </div>
                     </paper-card>
                     <paper-card  id="signCardComplete">
@@ -169,7 +171,7 @@
                             <img id="signature" src$="{{data.sign.signature}}" alt="">
                         </div>
                         <div class="card-actions layout horizontal end-justified">
-                            <paper-button class="grey" on-transitionend="_signAgainTap">Sign again</paper-button>
+                            <paper-button class="grey" on-tap="_signAgainTap">Sign again</paper-button>
                         </div>
                     </paper-card>
                 </iron-pages>
@@ -229,15 +231,21 @@
                         this.scroll(0, this.$.signCardPages.offsetTop - 80);
                     }
                 },
-                _openTouchareaTap: function () {
-                    this.fire('open-toucharea');
+                _openTouchareaTap: function (e) {
+                    e.target.addEventListener('transitionend', function(e) {
+                        this.fire('open-toucharea');
+                    });
                 },
-                _openBrandPageTap: function() {
-                    this.fire('open-brand-page');
+                _openBrandPageTap: function(e) {
+                    e.target.addEventListener('transitionend', function(e) {
+                        this.fire('open-brand-page');
+                    });
                 },
-                _signAgainTap: function() {
-                    this.set('data.sign.complete', false);
-                    this.$.signCardPages.selected = 0;
+                _signAgainTap: function(e) {
+                    e.target.addEventListener('transitionend', function(e) {
+                        this.set('data.sign.complete', false);
+                        this.$.signCardPages.selected = 0;
+                    });
                 }
             });
         })();
