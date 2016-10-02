@@ -179,7 +179,6 @@
                 _submitTap: function (e) {
                     this.saveSignature();
                     this._resetCanvas();
-                    this.set('data.sign.signature', this.loadSignature());
                     this.fire('close-toucharea');
                     this.set('data.sign.complete', true )
                 },
@@ -205,11 +204,8 @@
                 saveSignature: function () {
                     var trimmed = this._trim(this.signatureMark.canvas);
                     if (trimmed) {
-                        localStorage.setItem('signature', trimmed.toDataURL('image/png'));
+                        this.set('data.sign.signature', trimmed.toDataURL('image/png'));
                     }
-                },
-                loadSignature: function () {
-                    return localStorage.getItem('signature');
                 },
                 _trim: function (c) {
                     var ctx = c.getContext('2d'),

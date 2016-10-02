@@ -179,7 +179,9 @@
                     </paper-card>
                 </iron-pages>
                 <!-- 提問部分 -->
-                <junban-mobilekiosk-form data="{{data}}"></junban-mobilekiosk-form>
+                <template is="dom-if" if="{{data.sign.complete}}">
+                    <junban-mobilekiosk-form data="{{data}}" submit="{{submit}}"></junban-mobilekiosk-form>
+                </template>
             </div>
             <!--/ end Content Part-->
 
@@ -227,7 +229,8 @@
                                 }]
                             }
                         }
-                    }
+                    },
+                    submit: Function
                 },
                 signCompleteChanged: function(boolean) {
                     if(boolean === true) {

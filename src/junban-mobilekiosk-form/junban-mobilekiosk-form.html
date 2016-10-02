@@ -66,12 +66,12 @@
                             class=" layout vertical"
                             selected="{{form.selected}}"
                             on-iron-select="_updateStyles">
-                            <template is="dom-repeat" items="{{form.choices}}" as="choices">
+                            <template is="dom-repeat" items="{{form.choices}}" as="choice">
                                 <paper-radio-button
-                                    name="{{choices}}"
-                                    value="{{choices}}"
+                                    name="{{choice.id}}"
+                                    value="{{choice}}"
                                     required$="{{!form.selected}}">
-                                    {{choices}}
+                                    {{choice.answer}}
                                 </paper-radio-button>
                             </template>
                         </paper-radio-group>
@@ -101,7 +101,8 @@
                     data: {
                         type: Array,
                         value: []
-                    }
+                    },
+                    submit: Function
                 },
 
                 // for debug
@@ -115,7 +116,11 @@
                 // Form Validation
 
                 _submitForm: function(e) {
-                    this.$.form.submit();
+                    if (this.$.form.validate()) {
+                        e.detail.form = this.$.form.serialize();
+                        e.detail.signature = this.data.sign.signature;
+                        this.submit(e);
+                    }
                     this.updateStyles();
                 },
                 _formInvalid: function() {
