@@ -170,17 +170,17 @@
                     </paper-card>
                     <paper-card  id="signCardComplete">
                         <div class="card-content">
-                            <p>Sign Complete</p>
                             <img id="signature" src$="{{data.sign.signature}}" />
+                            <p>サインは完成しました、次の選択をお決めください。</p>
                         </div>
                         <div class="card-actions layout horizontal end-justified">
-                            <paper-button class="grey" on-transitionend="_signAgainTap">Sign again</paper-button>
+                            <paper-button class="grey" on-transitionend="_signAgainTap">書き直し</paper-button>
                         </div>
                     </paper-card>
                 </iron-pages>
                 <!-- 提問部分 -->
-                <template is="dom-if" if="{{data.sign.complete}}">
-                    <junban-mobilekiosk-form data="{{data}}" submit="{{submit}}"></junban-mobilekiosk-form>
+                <template is="dom-if" if="{{data.sign.complete}}" restamp>
+                    <junban-mobilekiosk-form id="form" data="{{data}}" submit="{{submit}}"></junban-mobilekiosk-form>
                 </template>
             </div>
             <!--/ end Content Part-->
@@ -235,7 +235,9 @@
                 signCompleteChanged: function(boolean) {
                     if(boolean === true) {
                         this.$.signCardPages.selected = 1;
-                        this.scroll(0, this.$.signCardPages.offsetTop - 80);
+                        this.async(function(){
+                            this.scroll(0, this.$.signCardPages.offsetTop - 80);
+                        }, 500);
                     }
                 },
                 _openTouchareaTap: function (e) {

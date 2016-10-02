@@ -9,6 +9,7 @@
 <link rel="import" href="../../bower_components/paper-radio-group/paper-radio-group.html">
 <link rel="import" href="../../bower_components/paper-radio-button/paper-radio-button.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animation-runner-behavior.html">
 
 <dom-module id="junban-mobilekiosk-form">
     <template>
@@ -17,7 +18,8 @@
                 @apply(--layout-vertical);
                 margin: auto 0;
                 padding: 0 0;
-
+                /* fix transform animation causing scroll-y miscaculated container height */
+                overflow: hidden;
             }
 
             paper-card {
@@ -55,8 +57,8 @@
               method="post"
               on-iron-form-invalid="_formInvalid"
               action="">
-            <template is="dom-repeat" items="{{data.form}}" as="form">
-                <paper-card heading="{{form.question}}">
+            <template is="dom-repeat" items="{{data.form}}" as="form" on-dom-change="_playAnimation">
+                <paper-card class='card' heading="{{form.question}}">
                     <div class="card-content">
                          <!--! TODO: 關於 iron-form 的問題 https://github.com/PolymerElements/paper-radio-group/issues/32
                          臨時解法 (?
@@ -80,7 +82,7 @@
             </template>
 
             <!-- 送出資料  -->
-            <paper-card>
+            <paper-card class='card'>
                 <div class="card-content" heading="提示">
                     <p>送信ボタンを押すと「{{data.info.title}}」の順番に入ります。</p>
                 </div>
@@ -97,20 +99,22 @@
             Polymer({
                 is: 'junban-mobilekiosk-form',
 
+                behaviors: [
+                    Polymer.NeonAnimationRunnerBehavior
+                ],
                 properties: {
                     data: {
                         type: Array,
                         value: []
                     },
-                    submit: Function
-                },
-
-                // for debug
-                observers: [
-                    'dataChanged(data.form.*)'
-                ],
-                dataChanged: function (v) {
-                    console.log(v);
+                    submit: Function,
+                    animationConfig: {
+                        value: function() {
+                            return {
+                                entry:[]
+                            }
+                        }
+                    }
                 },
 
                 // Form Validation
@@ -133,6 +137,22 @@
                     }
                     console.log(e);
                     this.updateStyles();
+                },
+                /**
+                 * Life
+                 * */
+                _playAnimation: function(e){
+                    this.paperCard =  Polymer.dom(this.root).querySelectorAll('paper-card');
+                    this.animationConfig['entry'].push({
+                        name: 'cascaded-animation',
+                        animation: 'transform-animation',
+                        transformFrom: 'translateY(100vh)',
+                        nodes: this.paperCard,
+                        timing: {
+                            delay: 500
+                        }
+                    });
+                    this.playAnimation('entry');
                 }
             });
         })();
