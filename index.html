@@ -13,6 +13,7 @@
 
     <link rel="manifest" href="/manifest.json">
     <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="bower_components/lodash/dist/lodash.min.js"></script>
 
     <!-- Elements -->
     <link rel="import" href="src/junban-mobilekiosk/junban-mobilekiosk.html">
@@ -29,12 +30,27 @@
 </head>
 <body class="fullbleed">
 <template id="scope" is="dom-bind">
-    <junban-mobilekiosk data="{{data}}"></junban-mobilekiosk>
+    <junban-mobilekiosk data="{{data}}" submit="{{submit}}"></junban-mobilekiosk>
 </template>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         var scope = document.querySelector('#scope');
 
+        scope.submit = function (e) {
+            console.log('submit', e);
+            var answers = _.map(e.detail.form, function (answer) {
+                return {
+                    question: {id: answer.question_id},
+                    answer: {id: answer.id}
+                };
+            });
+            var signature = e.detail.signature;
+            var body = {
+                answers: answers,
+                signature: signature
+            };
+            console.log('submit body', body);
+        };
 
         scope.data = {
             info: {
@@ -53,20 +69,12 @@
             form: [
                 {
                     question: 'questionA',
-                    choices: ['choice content1', 'choice content2', 'choice content3', 'choice content4'],
+                    choices: [{"id":1,"question_id":1,"index":0,"answer":"Answer 1"},{"id":2,"question_id":1,"index":1,"answer":"Answer 2"}],
                     selected: '' // 由 radio-button-group 提供數值
                 },
                 {
                     question: 'questionB very longggggggggggggggggggg gggggggggg',
-                    choices: ['choice content1', 'choice content2']
-                },
-                {
-                    question: 'questionC',
-                    choices: ['choice content1', 'choice content2', 'choice content3']
-                },
-                {
-                    question: 'questionD',
-                    choices: ['choice content1', 'choice content2']
+                    choices: [{"id":3,"question_id":2,"index":0,"answer":"Answer 1"},{"id":4,"question_id":2,"index":1,"answer":"Answer 2"}, {"id":5,"question_id":2,"index":2,"answer":"Answer 2"}]
                 }
             ]
         };
