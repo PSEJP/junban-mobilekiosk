@@ -1,0 +1,186 @@
+<html><head><link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/font-roboto/roboto.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+
+<link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../bower_components/app-layout/demo/sample-content.html">
+<link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
+
+<link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+
+
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/iron-scroll-target-behavior/iron-scroll-target-behavior.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+
+
+<link rel="import" href="../../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+
+
+<link rel="import" href="../junban-mobilekiosk-form/junban-mobilekiosk-form.html">
+
+</head><body><dom-module id="junban-mobilekiosk-layout">
+    <template>
+        <style>
+            :host {
+
+            }
+
+            app-header {
+                background-color: #4285f4;
+                color: #fff;
+            }
+
+            app-header paper-icon-button {
+                --paper-icon-button-ink-color: white;
+            }
+
+            app-header {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 240px;
+                color: #fff;
+
+                background-color: var(--paper-yellow-900);
+                /*
+                background-image: url(//app-layout-assets.appspot.com/assets/bg3.jpg);
+                background-position: bottom center;
+                background-size: cover;
+                */
+
+                --app-header-background-front-layer: {
+                    background: -webkit-linear-gradient(top, transparent 0%, transparent 50%, rgba(255, 255, 255, 0.3) 100%);
+                };
+
+                --app-header-background-rear-layer: {
+                    background-color: var(--paper-blue-grey-600);
+                };
+            }
+
+            app-toolbar.tall {
+                padding-top: 24px;
+                padding-bottom: 16px;
+                height: auto;
+            }
+
+            app-toolbar.info {
+                background-color: var(--paper-blue-grey-600);
+                color: #fff;
+            }
+
+            app-toolbar.info [counter] {
+                font-size: 24px;
+            }
+
+            app-toolbar.info [sub-msg] {
+                font-size: 14px;
+            }
+
+            app-header-layout div[content] {
+                padding: 8px 6px;
+            }
+
+            paper-card {
+                width: 100%;
+                margin-bottom: 8px;
+            }
+
+            paper-button:focus {
+                font-weight: 400 !important;
+            }
+            paper-button.indigo {
+                background-color: var(--paper-indigo-500);
+                color: white;
+            }
+
+            paper-button.grey {
+                background-color: var(--paper-grey-200);
+            }
+
+            paper-button.block {
+                display: block;
+                margin: auto 0;
+                text-align: center;
+            }
+
+            #signature {
+                max-width: 100%;
+            }
+
+            [main-title] {
+                font-weight: 300;
+                position: absolute;
+                bottom: 25px;
+                left: 15px;
+                font-size: 28px;
+                margin: 0;
+            }
+
+            [condensed-title] {
+                font-weight: lighter;
+                margin-left: 30px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            [condensed-title] i {
+                font-weight: 100;
+                font-style: normal;
+            }
+        </style>
+        <app-header-layout id="layout">
+
+
+            
+            <app-header condenses="" fixed="" effects="waterfall resize-snapped-title fade-background" effects-config="{&quot;resize-snapped-title&quot;: {&quot;startsAt&quot;: 0.8, &quot;duration&quot;: &quot;100ms&quot;}, &quot;fade-background&quot;: {&quot;startsAt&quot;: 0.8, &quot;endsAt&quot;: 0.9}}">
+                <app-toolbar>
+                    <h4 condensed-title="">{{data.info.title}}</h4>
+                    <paper-icon-button icon="info" on-tap="_openBrandPageTap"></paper-icon-button>
+                </app-toolbar>
+                <div main-title="">{{data.info.title}}</div>
+            </app-header>
+            <app-toolbar class="info tall layout vertical start">
+                <div counter="">{{data.info.counter}}組お待ち</div>
+                <div sub-msg="">ただいま「{{data.info.counter}}組」のお客さんはお待ちしております</div>
+            </app-toolbar>
+
+
+            
+            <div content="">
+                
+                <iron-pages id="signCardPages" selected="0">
+                    <paper-card id="signCard">
+                        <div class="card-content">
+                            <p>{{data.info.content}}</p>
+                        </div>
+                        <div class="card-actions">
+                            <paper-button id="signBtn" class="indigo block" on-transitionend="_openTouchareaTap">{{data.info.action_instruction}}</paper-button>
+                        </div>
+                    </paper-card>
+                    <paper-card id="signCardComplete">
+                        <div class="card-content">
+                            <p>Sign Complete</p>
+                            <img id="signature" src$="{{data.sign.signature}}">
+                        </div>
+                        <div class="card-actions layout horizontal end-justified">
+                            <paper-button class="grey" on-transitionend="_signAgainTap">Sign again</paper-button>
+                        </div>
+                    </paper-card>
+                </iron-pages>
+                
+                <junban-mobilekiosk-form data="{{data}}"></junban-mobilekiosk-form>
+            </div>
+            
+
+
+        </app-header-layout>
+    </template>
+    <script>!function(){"use strict";Polymer({is:"junban-mobilekiosk-layout",behaviors:[Polymer.NeonSharedElementAnimatableBehavior,Polymer.IronScrollTargetBehavior],observers:["signCompleteChanged(data.sign.complete)"],properties:{data:{type:Object,value:{},notify:!0},sharedElements:{type:Object,value:function(){return{ripple:this.$.signCard}}},animationConfig:{type:Object,value:function(){return{exit:[{name:"ripple-animation",id:"ripple",fromPage:this}]}}}},signCompleteChanged:function(e){e===!0&&(this.$.signCardPages.selected=1,this.scroll(0,this.$.signCardPages.offsetTop-80))},_openTouchareaTap:function(e){this.fire("open-toucharea")},_openBrandPageTap:function(e){this.fire("open-brand-page")},_signAgainTap:function(e){this.set("data.sign.complete",!1),this.$.signCardPages.selected=0}})}();</script>
+</dom-module>
+</body></html>
