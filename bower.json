@@ -8,7 +8,8 @@
     "neon-elements": "PolymerElements/neon-elements#^1.0.0",
     "app-elements": "PolymerElements/app-elements#^0.10.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.22",
-    "lodash": "^4.16.2"
+    "lodash": "^4.16.2",
+    "SVG-Loaders": "svg-loaders#^1.0.2"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
