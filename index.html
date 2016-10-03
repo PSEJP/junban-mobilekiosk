@@ -60,26 +60,25 @@
                 action_instruction: 'サインして順番に入ります' // 簽名btn內文
             },
             sign:{
-                complete: false,
+                complete: false, // 簽名了沒
                 width: 190,
                 height: 60,
                 // base64
-                signature: ''
+                signature: '' // 簽名data-uri
             },
             form: [
                 {
-                    question: 'questionA',
+                    question: '質問A',
                     choices: [{"id":1,"question_id":1,"index":0,"answer":"Answer 1"},{"id":2,"question_id":1,"index":1,"answer":"Answer 2"}],
                     selected: '' // 由 radio-button-group 提供數值
                 },
                 {
-                    question: 'questionB very longggggggggggggggggggg gggggggggg',
+                    question: 'しつもんB',
                     choices: [{"id":3,"question_id":2,"index":0,"answer":"Answer 1"},{"id":4,"question_id":2,"index":1,"answer":"Answer 2"}, {"id":5,"question_id":2,"index":2,"answer":"Answer 2"}]
                 }
             ]
         };
 
-        console.log('data ready');
     });
 </script>
 </body>
