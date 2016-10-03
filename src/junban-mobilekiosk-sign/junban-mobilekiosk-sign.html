@@ -1,7 +1,9 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <script src="../../node_modules/signature-mark/build/signature-mark.js"></script>
 
 <dom-module id="junban-mobilekiosk-sign">
@@ -14,6 +16,7 @@
                 bottom: 0px;
                 left: 0px;
             }
+
             #container {
                 position: relative;
                 height: 100%;
@@ -63,7 +66,6 @@
                 will-change: transform;
             }
 
-
             /* For portrait, we want the sign area keep landscape view */
 
             @media screen and (orientation: portrait) {
@@ -75,9 +77,10 @@
                     height: 100vh;
                     width: 100vw;
                 }
+
                 #toucharea {
-                    width: calc(100vw - 12px) ;
-                    height: calc( 100 / 16 * 9vw);
+                    width: calc(100vw - 12px);
+                    height: calc(100 / 16 * 9vw);
                     top: 50vw;
                 }
             }
@@ -85,11 +88,21 @@
             /* For landscape, we want the sign area work as normal*/
 
             @media screen and (orientation: landscape) {
+                paper-tooltip {
+                    display: none;
+                }
             }
         </style>
         <div id="fixed"></div>
         <div id="container">
-            <div id="toucharea"> </div>
+            <paper-tooltip fit-to-visible-bounds manual-mode position="top">
+                <div class="layout horizontal">
+                    <img src="../img/smartphone-to-horizontal-outline-stroke.svg"
+                         style="width:64px;height:64px;margin: 0 10px 0 0;">
+                    <p class="flex"">ヒント：スマホを横持ちすれば、書きスベースが広げられます。</p>
+                </div>
+            </paper-tooltip>
+            <div id="toucharea"></div>
             <paper-button id="clearBtn" on-tap="_clearTap">書き直し</paper-button>
             <paper-button id="submitBtn" on-transitionend="_submitTap">セーブする</paper-button>
         </div>
@@ -107,8 +120,13 @@
                 ],
 
                 listeners: {
-                    'iron-resize': '_onIronResize'
+                    'iron-resize': '_onIronResize',
+                    'iron-select': '_onIronSelect'
                 },
+
+                observers: [
+                    '_elementActive(active)'
+                ],
 
                 properties: {
                     data: {
@@ -116,7 +134,6 @@
                         value: {},
                         notify: true
                     },
-
                     sharedElements: {
                         type: Object,
                         value: function () {
@@ -180,7 +197,7 @@
                     this.saveSignature();
                     this._resetCanvas();
                     this.fire('close-toucharea');
-                    this.set('data.sign.complete', true )
+                    this.set('data.sign.complete', true)
                 },
                 _clearTap: function () {
                     this._resetCanvas();
@@ -188,7 +205,7 @@
                 _onIronResize: function () {
                     this._resetCanvas();
                 },
-                _resetCanvas: function() {
+                _resetCanvas: function () {
                     if (this.signatureMark) {
                         this.signatureMark.destroy();
                         this.$.toucharea.removeChild(this.signatureMark.canvas);
@@ -209,20 +226,20 @@
                 },
                 _trim: function (c) {
                     var ctx = c.getContext('2d'),
-                            copy = document.createElement('canvas').getContext('2d'),
-                            pixels = ctx.getImageData(0, 0, c.width, c.height),
-                            l = pixels.data.length,
-                            i,
-                            bound = {
-                                top: null,
-                                left: null,
-                                right: null,
-                                bottom: null
-                            },
-                            x, y;
+                        copy = document.createElement('canvas').getContext('2d'),
+                        pixels = ctx.getImageData(0, 0, c.width, c.height),
+                        l = pixels.data.length,
+                        i,
+                        bound = {
+                            top: null,
+                            left: null,
+                            right: null,
+                            bottom: null
+                        },
+                        x, y;
 
                     for (i = 0; i < l; i += 4) {
-                        if (pixels.data[i+3] !== 0) {
+                        if (pixels.data[i + 3] !== 0) {
                             x = (i / 4) % c.width;
                             y = ~~((i / 4) / c.width);
 
@@ -265,6 +282,17 @@
 
                     // open new window with trimmed image:
                     return copy.canvas;
+                },
+                /**
+                 * observers
+                 * */
+                _elementActive: function (e) {
+                    this.tooltips = Polymer.dom(this.root).querySelector('paper-tooltip');
+                    if(this.root.host.hasAttribute('active')) {
+                        this.tooltips.show();
+                    } else {
+                        this.tooltips.hide();
+                    }
                 }
             });
         })();
