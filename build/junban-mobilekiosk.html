@@ -21488,7 +21488,9 @@ event and do your own custom submission:
                     background-color: var(--paper-blue-grey-600);
                 };
             }
-
+            app-toolbar.no-align-item {
+                align-items: inherit !important;
+            }
             app-toolbar.tall {
                 padding-top: 24px;
                 padding-bottom: 16px;
@@ -21535,6 +21537,13 @@ event and do your own custom submission:
                 text-align: center;
             }
 
+            paper-button[disabled] {
+                background-color: var(--paper-grey-400);
+            }
+            .font-menu {
+                @apply(--paper-font-menu);
+            }
+
             #signature {
                 max-width: 100%;
             }
@@ -21559,6 +21568,14 @@ event and do your own custom submission:
                 font-weight: 100;
                 font-style: normal;
             }
+            .svg-loader {
+                width: 36px;
+                height: 36px;
+                display: inline-block;
+                background-color: #fff;
+
+                mask-size: cover;
+            }
         </style>
         <app-header-layout id="layout">
 
@@ -21571,9 +21588,19 @@ event and do your own custom submission:
                 </app-toolbar>
                 <div main-title="">{{data.info.title}}</div>
             </app-header>
-            <app-toolbar class="info tall layout vertical start">
-                <div class="layout horizontal">
-                    <div counter="">{{data.info.counter}}組お待ち</div>
+            <app-toolbar class="info tall layout vertical start no-align-item">
+                <div class="layout horizontal justified center">
+                    <div counter="" class="flex">{{data.info.counter}}組お待ち</div>
+                    <div class="layout horizontal center font-menu">
+                        <template is="dom-if" if="[[data.info.operation]]">
+                            <img src="[[resolveUrl('../img/svg-loader-puff-green.svg')]]" alt="">
+                            <sapn style="color: #76ff03;">営業中</sapn>
+                        </template>
+                        <template is="dom-if" if="[[!data.info.operation]]">
+                            <iron-icon icon="icons:warning" style="color: #fff176; margin: 6px 10px"></iron-icon>
+                            <sapn style="color: #fff176">当店は準備中です</sapn>
+                        </template>
+                    </div>
                 </div>
                 <div sub-msg="">ただいま「{{data.info.counter}}組」のお客さんはお待ちしております</div>
             </app-toolbar>
@@ -21588,7 +21615,7 @@ event and do your own custom submission:
                             <p>{{data.info.content}}</p>
                         </div>
                         <div class="card-actions">
-                            <paper-button id="signBtn" class="indigo block" on-transitionend="_openTouchareaTap">{{data.info.action_instruction}}</paper-button>
+                            <paper-button id="signBtn" class="indigo block" on-transitionend="_openTouchareaTap" disabled="{{!data.info.operation}}">{{data.info.action_instruction}}</paper-button>
                         </div>
                     </paper-card>
                     <paper-card id="signCardComplete">
