@@ -11401,16 +11401,12 @@ this.currentTarget=a,this.defaultPrevented=!1,this.eventPhase=Event.AT_TARGET,th
       * To get @ returned, set noSpecialChars = false
      */
     function normalizedKeyForEvent(keyEvent, noSpecialChars) {
-      // Fall back from .key, to .detail.key for artifical keyboard events,
-      // and then to deprecated .keyIdentifier and .keyCode.
-      if (keyEvent.key) {
-        return transformKey(keyEvent.key, noSpecialChars);
-      }
-      if (keyEvent.detail && keyEvent.detail.key) {
-        return transformKey(keyEvent.detail.key, noSpecialChars);
-      }
-      return transformKeyIdentifier(keyEvent.keyIdentifier) ||
-        transformKeyCode(keyEvent.keyCode) || '';
+      // Fall back from .key, to .keyIdentifier, to .keyCode, and then to
+      // .detail.key to support artificial keyboard events.
+      return transformKey(keyEvent.key, noSpecialChars) ||
+        transformKeyIdentifier(keyEvent.keyIdentifier) ||
+        transformKeyCode(keyEvent.keyCode) ||
+        transformKey(keyEvent.detail ? keyEvent.detail.key : keyEvent.detail, noSpecialChars) || '';
     }
 
     function keyComboMatchesEvent(keyCombo, event) {
@@ -12652,11 +12648,6 @@ this.currentTarget=a,this.defaultPrevented=!1,this.eventPhase=Event.AT_TARGET,th
         }
       },
 
-      /**
-       * This conflicts with Element#antimate().
-       * https://developer.mozilla.org/en-US/docs/Web/API/Element/animate
-       * @suppress {checkTypes}
-       */
       animate: function() {
         if (!this._animating) {
           return;
@@ -12972,11 +12963,6 @@ this.currentTarget=a,this.defaultPrevented=!1,this.eventPhase=Event.AT_TARGET,th
                   0  8px 10px -5px rgba(0, 0, 0, 0.4);
     };
 
-    --shadow-elevation-24dp: {
-      box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14),
-                  0 9px 46px 8px rgba(0, 0, 0, 0.12),
-                  0 11px 15px -7px rgba(0, 0, 0, 0.4);
-    };
   }
 
 </style>
@@ -13988,7 +13974,8 @@ this.currentTarget=a,this.defaultPrevented=!1,this.eventPhase=Event.AT_TARGET,th
          * `iconset_name:icon_name`.
          */
         icon: {
-          type: String
+          type: String,
+          observer: '_iconChanged'
         },
 
         /**
@@ -13996,7 +13983,8 @@ this.currentTarget=a,this.defaultPrevented=!1,this.eventPhase=Event.AT_TARGET,th
          * iconset.
          */
         theme: {
-          type: String
+          type: String,
+          observer: '_updateIcon'
         },
 
         /**
@@ -14005,24 +13993,19 @@ this.currentTarget=a,this.defaultPrevented=!1,this.eventPhase=Event.AT_TARGET,th
          * precedence over a given icon attribute.
          */
         src: {
-          type: String
+          type: String,
+          observer: '_srcChanged'
         },
 
         /**
          * @type {!Polymer.IronMeta}
          */
         _meta: {
-          value: Polymer.Base.create('iron-meta', {type: 'iconset'})
+          value: Polymer.Base.create('iron-meta', {type: 'iconset'}),
+          observer: '_updateIcon'
         }
 
       },
-
-      observers: [
-        '_updateIcon(_meta, isAttached)',
-        '_updateIcon(theme, isAttached)',
-        '_srcChanged(src, isAttached)',
-        '_iconChanged(icon, isAttached)'
-      ],
 
       _DEFAULT_ICONSET: 'icons',
 
@@ -14136,25 +14119,8 @@ this.currentTarget=a,this.defaultPrevented=!1,this.eventPhase=Event.AT_TARGET,th
       size: {
         type: Number,
         value: 24
-      },
-
-      /**
-       * Set to true to enable mirroring of icons where specified when they are
-       * stamped. Icons that should be mirrored should be decorated with a
-       * `mirror-in-rtl` attribute.
-       */
-      rtlMirroring: {
-        type: Boolean,
-        value: false
-      }
-    },
-
-    _targetIsRTL: function(target) {
-      if (target && target.nodeType !== Node.ELEMENT_NODE) {
-        target = target.host;
       }
 
-      return target && window.getComputedStyle(target)['direction'] === 'rtl';
     },
 
     attached: function() {
@@ -14190,8 +14156,7 @@ this.currentTarget=a,this.defaultPrevented=!1,this.eventPhase=Event.AT_TARGET,th
       // Remove old svg element
       this.removeIcon(element);
       // install new svg element
-      var svg = this._cloneIcon(iconName,
-          this.rtlMirroring && this._targetIsRTL(element));
+      var svg = this._cloneIcon(iconName);
       if (svg) {
         var pde = Polymer.dom(element);
         pde.insertBefore(svg, pde.childNodes[0]);
@@ -14250,35 +14215,28 @@ this.currentTarget=a,this.defaultPrevented=!1,this.eventPhase=Event.AT_TARGET,th
      * @return {Element} Returns an installable clone of the SVG element
      * matching `id`.
      */
-    _cloneIcon: function(id, mirrorAllowed) {
+    _cloneIcon: function(id) {
       // create the icon map on-demand, since the iconset itself has no discrete
       // signal to know when it's children are fully parsed
       this._icons = this._icons || this._createIconMap();
-      return this._prepareSvgClone(this._icons[id], this.size, mirrorAllowed);
+      return this._prepareSvgClone(this._icons[id], this.size);
     },
 
     /**
      * @param {Element} sourceSvg
      * @param {number} size
-     * @param {Boolean} mirrorAllowed
      * @return {Element}
      */
-    _prepareSvgClone: function(sourceSvg, size, mirrorAllowed) {
+    _prepareSvgClone: function(sourceSvg, size) {
       if (sourceSvg) {
         var content = sourceSvg.cloneNode(true),
             svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
-            viewBox = content.getAttribute('viewBox') || '0 0 ' + size + ' ' + size,
-            cssText = 'pointer-events: none; display: block; width: 100%; height: 100%;';
-
-        if (mirrorAllowed && content.hasAttribute('mirror-in-rtl')) {
-          cssText += '-webkit-transform:scale(-1,1);transform:scale(-1,1);';
-        }
-
+            viewBox = content.getAttribute('viewBox') || '0 0 ' + size + ' ' + size;
         svg.setAttribute('viewBox', viewBox);
         svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
         // TODO(dfreedm): `pointer-events: none` works around https://crbug.com/370136
         // TODO(sjmiles): inline style may not be ideal, but avoids requiring a shadow-root
-        svg.style.cssText = cssText;
+        svg.style.cssText = 'pointer-events: none; display: block; width: 100%; height: 100%;';
         svg.appendChild(content).removeAttribute('id');
         return svg;
       }
@@ -14286,7 +14244,6 @@ this.currentTarget=a,this.defaultPrevented=!1,this.eventPhase=Event.AT_TARGET,th
     }
 
   });
-
 </script>
 <iron-iconset-svg name="icons" size="24">
 <svg><defs>
@@ -15179,18 +15136,15 @@ this.currentTarget=a,this.defaultPrevented=!1,this.eventPhase=Event.AT_TARGET,th
       '_scrollTargetChanged(scrollTarget, isAttached)'
     ],
 
-    /**
-     * True if the event listener should be installed.
-     */
-    _shouldHaveListener: true,
-
     _scrollTargetChanged: function(scrollTarget, isAttached) {
       var eventTarget;
 
       if (this._oldScrollTarget) {
-        this._toggleScrollListener(false, this._oldScrollTarget);
+        eventTarget = this._oldScrollTarget === this._doc ? window : this._oldScrollTarget;
+        eventTarget.removeEventListener('scroll', this._boundScrollHandler);
         this._oldScrollTarget = null;
       }
+
       if (!isAttached) {
         return;
       }
@@ -15206,10 +15160,11 @@ this.currentTarget=a,this.defaultPrevented=!1,this.eventPhase=Event.AT_TARGET,th
 
       } else if (this._isValidScrollTarget()) {
 
+        eventTarget = scrollTarget === this._doc ? window : scrollTarget;
         this._boundScrollHandler = this._boundScrollHandler || this._scrollHandler.bind(this);
         this._oldScrollTarget = scrollTarget;
-        this._toggleScrollListener(this._shouldHaveListener, scrollTarget);
 
+        eventTarget.addEventListener('scroll', this._boundScrollHandler);
       }
     },
 
@@ -15336,31 +15291,7 @@ this.currentTarget=a,this.defaultPrevented=!1,this.eventPhase=Event.AT_TARGET,th
      */
     _isValidScrollTarget: function() {
       return this.scrollTarget instanceof HTMLElement;
-    },
-
-    _toggleScrollListener: function(yes, scrollTarget) {
-      if (!this._boundScrollHandler) {
-        return;
-      }
-      var eventTarget = scrollTarget === this._doc ? window : scrollTarget;
-
-      if (yes) {
-        eventTarget.addEventListener('scroll', this._boundScrollHandler);
-      } else {
-        eventTarget.removeEventListener('scroll', this._boundScrollHandler);
-      }
-    },
-
-    /**
-     * Enables or disables the scroll event listener.
-     *
-     * @param {boolean} yes True to add the event, False to remove it.
-     */
-    toggleScrollListener: function(yes) {
-      this._shouldHaveListener = yes;
-      this._toggleScrollListener(yes, this.scrollTarget);
     }
-
   };
 
 </script>
@@ -18134,7 +18065,7 @@ this.currentTarget=a,this.defaultPrevented=!1,this.eventPhase=Event.AT_TARGET,th
 
     <div class="header">
       <iron-image hidden$="[[!image]]" src="[[image]]" alt="[[alt]]" placeholder="[[placeholderImage]]" preload="[[preloadImage]]" fade="[[fadeImage]]"></iron-image>
-      <div hidden$="[[!heading]]" class$="title-text [[_computeHeadingClass(image)]]">[[heading]]</div>
+      <div hidden$="[[!heading]]" class$="[[_computeHeadingClass(image)]]">[[heading]]</div>
     </div>
 
     <content></content>
@@ -18232,7 +18163,10 @@ this.currentTarget=a,this.defaultPrevented=!1,this.eventPhase=Event.AT_TARGET,th
       },
 
       _computeHeadingClass: function(image) {
-        return image ? ' over-image' : '';
+        var cls = 'title-text';
+        if (image)
+          cls += ' over-image';
+        return cls;
       },
 
       _computeAnimated: function(animatedShadow) {
@@ -20644,8 +20578,6 @@ event and do your own custom submission:
       }
     },
 
-    _SEARCH_RESET_TIMEOUT_MS: 1000,
-
     hostAttributes: {
       'role': 'menu',
       'tabindex': '0'
@@ -20726,40 +20658,16 @@ event and do your own custom submission:
      * @param {KeyboardEvent} event A KeyboardEvent.
      */
     _focusWithKeyboardEvent: function(event) {
-      this.cancelDebouncer('_clearSearchText');
-
-      var searchText = this._searchText || '';
-      var key = event.key && event.key.length == 1 ? event.key :
-          String.fromCharCode(event.keyCode);
-      searchText += key.toLocaleLowerCase();
-
-      var searchLength = searchText.length;
-
       for (var i = 0, item; item = this.items[i]; i++) {
-        if (item.hasAttribute('disabled')) {
-          continue;
-        }
-
         var attr = this.attrForItemTitle || 'textContent';
-        var title = (item[attr] || item.getAttribute(attr) || '').trim();
+        var title = item[attr] || item.getAttribute(attr);
 
-        if (title.length < searchLength) {
-          continue;
-        }
-
-        if (title.slice(0, searchLength).toLocaleLowerCase() == searchText) {
+        if (!item.hasAttribute('disabled') && title &&
+            title.trim().charAt(0).toLowerCase() === String.fromCharCode(event.keyCode).toLowerCase()) {
           this._setFocusedItem(item);
           break;
         }
       }
-
-      this._searchText = searchText;
-      this.debounce('_clearSearchText', this._clearSearchText,
-                    this._SEARCH_RESET_TIMEOUT_MS);
-    },
-
-    _clearSearchText: function() {
-      this._searchText = '';
     },
 
     /**
@@ -21279,7 +21187,7 @@ event and do your own custom submission:
     /**
      * Selects the given value.
      */
-    select: function(value) {
+     select: function(value) {
       var newItem = this._valueToItem(value);
       if (newItem && newItem.hasAttribute('disabled')) {
         return;
@@ -21541,6 +21449,8 @@ event and do your own custom submission:
 
 
 
+
+
 <dom-module id="junban-mobilekiosk-layout" assetpath="../junban-mobilekiosk-layout/">
     <template>
         <style>
@@ -21680,13 +21590,12 @@ event and do your own custom submission:
                 </app-toolbar>
                 <div main-title="">{{data.info.title}}</div>
             </app-header>
-<<<<<<< HEAD
             <app-toolbar class="info tall layout vertical start no-align-item">
                 <div class="layout horizontal justified center">
                     <div counter="" class="flex">{{data.info.counter}}組お待ち</div>
                     <div class="layout horizontal center font-menu">
                         <template is="dom-if" if="[[data.info.operation]]">
-                            <img src="[[resolveUrl('../img/svg-loader-puff-green.svg')]]" alt="">
+                            <img src="[[resolveUrl('svg-loader-puff-green.svg')]]" alt="">
                             <sapn style="color: #76ff03;">営業中</sapn>
                         </template>
                         <template is="dom-if" if="[[!data.info.operation]]">
@@ -21695,10 +21604,6 @@ event and do your own custom submission:
                         </template>
                     </div>
                 </div>
-=======
-            <app-toolbar class="info tall layout vertical start">
-                <div counter="">{{data.info.counter}}組お待ち</div>
->>>>>>> 893d3c01870da3b3bc06bade44d203c6be3e295e
                 <div sub-msg="">ただいま「{{data.info.counter}}組」のお客さんはお待ちしております</div>
             </app-toolbar>
 
