@@ -6,7 +6,7 @@ var gulp = require('gulp'),
 var vulcanize = require('gulp-vulcanize');
 
 gulp.task('default', function () {
-    return gulp.src('src/junban-mobilekiosk/junban-mobilekiosk.html')
+    return gulp.src('junban-mobilekiosk/junban-mobilekiosk.html')
         .pipe(vulcanize({
             abspath: '',
             excludes: [],
@@ -27,18 +27,5 @@ gulp.task('browser-sync', function() {
         open: false, // Don't open browser on reload
         notify: true // Show notifications in the browser.
     });
-    bs.watch("./src/**/*.html").on("change", bs.reload);
-});
-
-
-// css less
-gulp.task('less', function () {
-    return gulp.src('src/less/**/*.less')
-        .pipe(plumber())
-        .pipe(less({
-            paths: [ path.join(__dirname, 'less', 'includes') ]
-            })
-        )
-        .pipe(gulp.dest('src/css'))
-        .pipe(bs.stream());
+    bs.watch("./**/*.html").on("change", bs.reload);
 });
