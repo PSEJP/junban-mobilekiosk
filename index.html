@@ -70,17 +70,21 @@
                 // base64
                 signature: '' // 簽名data-uri
             },
-            form: [
-                {
-                    question: '質問A',
-                    choices: [{"id":1,"question_id":1,"index":0,"answer":"Answer 1"},{"id":2,"question_id":1,"index":1,"answer":"Answer 2"}],
-                    selected: '' // 由 radio-button-group 提供數值
-                },
-                {
-                    question: 'しつもんB',
-                    choices: [{"id":3,"question_id":2,"index":0,"answer":"Answer 1"},{"id":4,"question_id":2,"index":1,"answer":"Answer 2"}, {"id":5,"question_id":2,"index":2,"answer":"Answer 2"}]
-                }
-            ]
+            form: {
+                storeQuestions: [
+                    {
+                        question: '質問A',
+                        choices: [{"id":1,"question_id":1,"index":0,"answer":"Answer 1"},{"id":2,"question_id":1,"index":1,"answer":"Answer 2"}],
+                        selected: '' // 由 radio-button-group 提供數值
+                    },
+                    {
+                        question: 'しつもんB',
+                        choices: [{"id":3,"question_id":2,"index":0,"answer":"Answer 1"},{"id":4,"question_id":2,"index":1,"answer":"Answer 2"}, {"id":5,"question_id":2,"index":2,"answer":"Answer 2"}]
+                    }
+                ],
+                userPhoneNumber: '',
+                userMessage:''
+            }
         };
 
     });

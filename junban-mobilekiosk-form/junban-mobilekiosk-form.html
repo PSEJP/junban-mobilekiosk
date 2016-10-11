@@ -65,22 +65,21 @@
               method="post"
               on-iron-form-invalid="_formInvalid"
               action="">
-            <template is="dom-repeat" items="{{data.form}}" as="form" on-dom-change="_playAnimation">
-                <paper-card class='card' heading="{{form.question}}">
+
+            <!-- 問題與選項 -->
+            <template is="dom-repeat" items="{{data.form.storeQuestions}}" as="store" on-dom-change="_playAnimation">
+                <paper-card class='card' heading="{{store.question}}">
                     <div class="card-content">
-                         <!--! TODO: 關於 iron-form 的問題 https://github.com/PolymerElements/paper-radio-group/issues/32
-                         臨時解法 (?
-                         http://stackoverflow.com/questions/38003624/how-to-enforce-required-paper-radio-group-in-polymer
-                         -->
+                        （必須）
                         <paper-radio-group
                             class=" layout vertical"
-                            selected="{{form.selected}}"
+                            selected="{{store.selected}}"
                             on-iron-select="_updateStyles">
-                            <template is="dom-repeat" items="{{form.choices}}" as="choice">
+                            <template is="dom-repeat" items="{{store.choices}}" as="choice">
                                 <paper-radio-button
                                     name="{{choice.id}}"
                                     value="{{choice}}"
-                                    required$="{{!form.selected}}">
+                                    required$="{{!store.selected}}">
                                     {{choice.answer}}
                                 </paper-radio-button>
                             </template>
