@@ -1,0 +1,140 @@
+<link rel="import" href="/static/junban-mobilekiosk/build/junban-mobilekiosk.html">
+<dom-module id="junban-mobilekiosk-container">
+    <template id="scope" is="dom-bind">
+        <junban-mobilekiosk data="{{data}}" submit="{{submit}}"></junban-mobilekiosk>
+    </template>
+    <script>
+        Polymer({
+            is: 'junban-mobilekiosk-container',
+            properties: {
+                data: Object
+            },
+            attached: function () {
+                this.data = {
+                    action: {
+                        loading: true
+                    },
+                    info: {
+                        title: 'Loading...',　// 店名
+                        operation: true, // 營業與否
+                        counter: 0, // 正在排隊人數
+                        content: 'この文章はダミーです。文字の大きさ、量、字間、行間等を確認するために入れています。', // 商店簡介內文
+                        action_instruction: 'サインして順番に入ります' // 簽名btn內文
+                    },
+                    sign: {
+                        complete: false, // 簽名了沒
+                        width: 190,
+                        height: 60,
+                        // base64
+                        signature: '' // 簽名data-uri
+                    },
+                    form: {}
+                };
+
+                const defaultHeaders = new Headers({
+                    'X-Requested-With': 'XMLHttpRequest'
+                });
+                const defaultFetchOptions = {
+                    headers: defaultHeaders,
+                    credentials: 'same-origin'
+                };
+
+                var scope = this;
+                scope.submit = function (e) {
+                    var answers = _.map(e.detail.form, function (answer) {
+                        return {
+                            question: {id: answer.question_id},
+                            answer: {id: answer.id}
+                        };
+                    });
+                    var signature = e.detail.signature;
+                    var body = {
+                        answers: answers,
+                        signature: signature,
+                        mobile_number: scope.data.form.userPhoneNumber,
+                        notes: scope.data.form.userMessage
+                    };
+
+                    fetch('/app/kiosk/_/crud/customers/', _.merge(defaultFetchOptions, {
+                        method: 'POST',
+                        body: JSON.stringify(body)
+                    }))
+                        .then(function (response) {
+                            return response.json();
+                        })
+                        .then(function (json) {
+                            if (json.id && json.token) {
+                                window.location.href = '/app/checker/auth/?id=' + json.id + "&token=" + json.token;
+                            } else {
+                                console.error('response.id or response.token not set', json);
+                            }
+                        })
+                        .catch(function (err) {
+                            console.error(err);
+                        });
+                };
+
+                var requests = [];
+
+                requests.push(
+                    fetch('/app/kiosk/_/appStatus/', defaultFetchOptions)
+                        .then(function (response) {
+                            return response.json();
+                        })
+                        .then(function (json) {
+                            scope.set('data.info.operation', !json.disabled);
+                        })
+                        .catch(handleError)
+                );
+
+                requests.push(
+                    fetch('/app/kiosk/_/info/', defaultFetchOptions)
+                        .then(function (response) {
+                            return response.json();
+                        })
+                        .then(function (json) {
+                            scope.set('data.info.title', json.company_name);
+                            scope.set('data.info.counter', json.parties)
+                        })
+                        .catch(handleError)
+                );
+
+                requests.push(
+                    fetch('/app/kiosk/_/messages/', defaultFetchOptions)
+                        .then(function (response) {
+                            return response.json();
+                        })
+                        .then(function (json) {
+                            scope.set('data.info.messages', json);
+                        })
+                        .catch(handleError)
+                );
+
+                requests.push(
+                    fetch('/app/kiosk/_/questions/', defaultFetchOptions)
+                        .then(function (response) {
+                            return response.json();
+                        })
+                        .then(function (json) {
+                            scope.set('data.form.storeQuestions', _.map(json.questions, function (question) {
+                                return {
+                                    question: question.question,
+                                    choices: question.answers,
+                                    selected: null
+                                };
+                            }));
+                        })
+                        .catch(handleError)
+                );
+
+                Promise.all(requests).then(function () {
+                    scope.set('data.action.loading', false);
+                });
+
+                function handleError(err) {
+                    console.error(err);
+                }
+            }
+        });
+    </script>
+</dom-module>
