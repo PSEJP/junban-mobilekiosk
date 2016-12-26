@@ -23445,13 +23445,13 @@ is separate from validation, and `allowed-pattern` does not affect how the input
                 </paper-card>
             </template>
 
-            
+
             <paper-card>
                 <div class="card-content">
-                    ご予約を確認するための携帯番号を追加してください。例：000-1234-5678 <br>
+                    携帯電話の番号を入力してください。例：000-1234-5678 <br>
                 </div>
                 <div class="card-actions">
-                    
+
                     <paper-input value="{{data.form.userPhoneNumber}}" type="number" required="" error-message="※携帯番号は必須です" placeholder="（必須）">
                         <iron-icon icon="hardware:smartphone" prefix=""></iron-icon>
                     </paper-input>
@@ -23468,13 +23468,12 @@ is separate from validation, and `allowed-pattern` does not affect how the input
                 </div>
             </paper-card>
 
-            
             <paper-card class="card">
                 <div class="card-content" heading="提示">
-                    <p>送信ボタンを押すと「{{data.info.title}}」の順番に入ります。</p>
+                    <p>下の登録ボタンを押すと登録が完了し、順番順番待ち画面が表示覚ます。一度画面を消すと再表示しないのでご注意ください。</p>
                 </div>
                 <div class="card-actions layout horizontal end-justified">
-                    <paper-button id="submitBtn" class="green" on-tap="_submitForm">送信</paper-button>
+                    <paper-button id="submitBtn" class="green" on-tap="_submitForm">登録</paper-button>
                 </div>
             </paper-card>
         </form>
@@ -23773,9 +23772,9 @@ is separate from validation, and `allowed-pattern` does not affect how the input
             </app-toolbar>
 
 
-            
+
             <div content="">
-                
+
                 <iron-pages id="signCardPages" selected="0">
                     <paper-card id="signCard">
                         <div class="card-content">
@@ -23788,19 +23787,18 @@ is separate from validation, and `allowed-pattern` does not affect how the input
                     <paper-card id="signCardComplete">
                         <div class="card-content">
                             <img id="signature" src$="{{data.sign.signature}}">
-                            <p>サインは完成しました、続いて下の選択をお決めください。</p>
                         </div>
                         <div class="card-actions layout horizontal end-justified">
-                            <paper-button class="grey" on-transitionend="_signAgainTap">書き直し</paper-button>
+                            <paper-button class="grey" on-transitionend="_signAgainTap">書き直す</paper-button>
                         </div>
                     </paper-card>
                 </iron-pages>
-                
+
                 <template is="dom-if" if="{{data.sign.complete}}" restamp="">
                     <junban-mobilekiosk-form id="form" data="{{data}}" submit="{{submit}}"></junban-mobilekiosk-form>
                 </template>
             </div>
-            
+
 
 
         </app-header-layout>
