@@ -70,7 +70,6 @@
             <template is="dom-repeat" items="{{data.form.storeQuestions}}" as="store" on-dom-change="_playAnimation">
                 <paper-card class='card' heading="{{store.question}}">
                     <div class="card-content">
-                        （必須）
                         <paper-radio-group
                             class=" layout vertical"
                             selected="{{store.selected}}"
@@ -91,7 +90,7 @@
             <!-- 手機號碼 -->
             <paper-card>
                 <div class="card-content">
-                    ご予約を確認するための携帯番号を追加してください。例：000-1234-5678 <br>
+                    携帯電話の番号を入力してください。例：000-1234-5678 <br>
                 </div>
                 <div class="card-actions">
                     <!-- TODO: type:number 資料驗證裡面不能有 - (減號) 000-1234-5678 錯誤 -->
@@ -114,10 +113,10 @@
             <!-- 送出資料  -->
             <paper-card class='card'>
                 <div class="card-content" heading="提示">
-                    <p>送信ボタンを押すと「{{data.info.title}}」の順番に入ります。</p>
+                    <p>下の登録ボタンを押すと登録が完了し、順番順番待ち画面が表示覚ます。一度画面を消すと再表示しないのでご注意ください。</p>
                 </div>
                 <div class="card-actions layout horizontal end-justified">
-                    <paper-button id="submitBtn" class="green" on-tap="_submitForm">送信</paper-button>
+                    <paper-button id="submitBtn" class="green" on-tap="_submitForm">登録</paper-button>
                 </div>
             </paper-card>
         </form>
