@@ -44,11 +44,10 @@
                 background-color: white;
                 will-change: transform;
             }
-
             #clearBtn {
                 position: absolute;
                 left: 10px;
-                bottom: 20px;
+                bottom: 80px;
                 z-index: 99999;
                 border: var(--paper-grey-200) 1px solid;
                 background-color: var(--paper-grey-100);
@@ -57,10 +56,10 @@
             #submitBtn {
                 position: absolute;
                 right: 10px;
-                bottom: 20px;
+                bottom: 80px;
                 z-index: 99999;
-                padding-right: 45px;
-                padding-left: 45px;
+                padding-right: 75px;
+                padding-left: 75px;
                 background-color: var(--paper-green-500);
                 color: white;
                 will-change: transform;
@@ -83,6 +82,16 @@
                     height: calc(100 / 16 * 9vw);
                     top: 50vw;
                 }
+                #toucharea #msg-signature-tip {
+                    position: absolute;
+                    bottom: 100%;
+                    padding: 6px 10px;
+                    font-size: 20px;
+                    color: #fff;
+                    background-color: rgba(0,0,0,0.6);
+                    width: 100%;
+                    box-sizing: border-box;
+                }
             }
 
             /* For landscape, we want the sign area work as normal*/
@@ -91,20 +100,29 @@
                 paper-tooltip {
                     display: none;
                 }
+
+                #toucharea #msg-signature-tip {
+                    position: absolute;
+                    padding: 6px 10px;
+                    color: grey;
+                }
             }
         </style>
         <div id="fixed"></div>
         <div id="container">
-            <paper-tooltip fit-to-visible-bounds manual-mode position="top">
-                <div class="layout horizontal">
-                    <img src={{resolveUrl("smartphone-to-horizontal-outline-stroke.svg")}}
-                         style="width:64px;height:64px;margin: 0 10px 0 0;">
-                    <p class="flex">ヒント：スマホを横持ちすれば、書きスベースが広げられます。</p>
-                </div>
-            </paper-tooltip>
-            <div id="toucharea"></div>
-            <paper-button id="clearBtn" on-tap="_clearTap">書き直し</paper-button>
-            <paper-button id="submitBtn" on-transitionend="_submitTap">セーブする</paper-button>
+            <!-- 暫時不使用 plz turn landscape Tips -->
+            <!--<paper-tooltip fit-to-visible-bounds manual-mode position="top">-->
+                <!--<div class="layout horizontal">-->
+                    <!--<img src={{resolveUrl("smartphone-to-horizontal-outline-stroke.svg")}}-->
+                         <!--style="width:64px;height:64px;margin: 0 10px 0 0;">-->
+                    <!--<p class="flex">ヒント：スマホを横持ちすれば、書きスベースが広げられます。</p>-->
+                <!--</div>-->
+            <!--</paper-tooltip>-->
+            <div id="toucharea">
+                <label id="msg-signature-tip">同步現在kiosk電腦版簽名區域上方用戶輸入的說明</label>
+            </div>
+            <paper-button id="clearBtn" on-tap="_clearTap">書き直す</paper-button>
+            <paper-button id="submitBtn" on-transitionend="_submitTap">次へ</paper-button>
         </div>
     </template>
     <script>
@@ -286,6 +304,7 @@
                 /**
                  * observers
                  * */
+                /* 暫時不使用
                 _elementActive: function (e) {
                     this.tooltips = Polymer.dom(this.root).querySelector('paper-tooltip');
                     if(this.root.host.hasAttribute('active')) {
@@ -293,7 +312,7 @@
                     } else {
                         this.tooltips.hide();
                     }
-                }
+                }*/
             });
         })();
     </script>
