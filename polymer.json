@@ -1,0 +1,29 @@
+{
+  "lint": {
+    "rules": [
+      "polymer-2-hybrid"
+    ]
+  },
+  "builds": [
+    {
+      "bundle": false,
+      "js": {
+        "minify": false
+      },
+      "css": {
+        "minify": false
+      },
+      "html": {
+        "minify": false
+      }
+    }
+  ],
+  "sources": [
+    "junban-mobilekiosk/**/*",
+    "junban-mobilekiosk-brand-page/**/*",
+    "junban-mobilekiosk-form/**/*",
+    "junban-mobilekiosk-layout/**/*",
+    "junban-mobilekiosk-sign/**/*",
+    "bower.json"
+  ]
+}

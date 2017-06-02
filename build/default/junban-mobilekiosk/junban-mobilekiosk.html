@@ -1,0 +1,52 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<!-- IRON -->
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+<!-- Neon -->
+<link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animations.html">
+
+
+<!-- User -->
+<link rel="import" href="../junban-mobilekiosk-sign/junban-mobilekiosk-sign.html">
+<link rel="import" href="../junban-mobilekiosk-layout/junban-mobilekiosk-layout.html">
+<link rel="import" href="../junban-mobilekiosk-brand-page/junban-mobilekiosk-brand-page.html">
+<link rel="import" href="loading-overlay.html">
+
+<dom-module id="junban-mobilekiosk">
+    <template>
+        <style>
+            :host {
+
+            }
+        </style>
+        <!-- simple apply https://elements.polymer-project.org/elements/iron-overlay-behavior -->
+        <loading-overlay opened="{{data.action.loading}}" with-backdrop="">
+        </loading-overlay>
+        <neon-animated-pages id="pages" selected="0" class="fit" selected-attribute="active">
+            <junban-mobilekiosk-layout data="{{data}}" on-open-toucharea="_openTouchareaTap" on-open-brand-page="_openBrandPage" submit="{{submit}}"></junban-mobilekiosk-layout>
+            <junban-mobilekiosk-sign data="{{data}}" on-close-toucharea="_backToTopTap"></junban-mobilekiosk-sign>
+        </neon-animated-pages>
+    </template>
+
+    <script>
+        Polymer({
+
+            is: 'junban-mobilekiosk',
+            properties: {
+                data: {
+                    type: Object,
+                    value: {},
+                    notify: true
+                },
+                submit: Function
+            },
+            _openTouchareaTap: function () {
+                this.$.pages.selected = 1;
+            },
+            _backToTopTap: function () {
+                this.$.pages.selected = 0;
+            }
+        });
+    </script>
+</dom-module>
