@@ -66,12 +66,32 @@
                     background-color: var(--paper-blue-grey-600);
                 };
             }
+
+            app-header::after {
+                position: absolute;
+                top: 0;
+                right: 0;
+                content: 'asdsad';
+
+            }
+
+            #brand {
+                display: inline-block;
+                width: 135px;
+                height: 42px;
+                margin-bottom: 0px;
+                background-image: url(img/junban-logo-subtitle.png);
+                background-repeat: no-repeat;
+                background-size: 100%;
+            }
+
             app-toolbar.no-align-item {
                 align-items: inherit !important;
             }
+
             app-toolbar.tall {
-                padding-top: 24px;
-                padding-bottom: 16px;
+                padding-top: 0.5em;
+                padding-bottom: 0.5em;
                 height: auto;
             }
 
@@ -100,6 +120,7 @@
             paper-button:focus {
                 font-weight: 400 !important;
             }
+
             paper-button.indigo {
                 background-color: var(--paper-indigo-500);
                 color: white;
@@ -118,6 +139,7 @@
             paper-button[disabled] {
                 background-color: var(--paper-grey-400);
             }
+
             .font-menu {
                 @apply(--paper-font-menu);
             }
@@ -129,10 +151,14 @@
             [main-title] {
                 font-weight: 300;
                 position: absolute;
-                bottom: 25px;
+                bottom: 28px;
                 left: 15px;
                 font-size: 28px;
                 margin: 0;
+            }
+            [sub-title] {
+                font-size: 22px;
+                margin-top: 3px;
             }
 
             [condensed-title] {
@@ -146,6 +172,7 @@
                 font-weight: 100;
                 font-style: normal;
             }
+
             .svg-loader {
                 width: 36px;
                 height: 36px;
@@ -163,49 +190,57 @@
                 condenses fixed
                 effects="waterfall resize-snapped-title fade-background"
                 effects-config='{"resize-snapped-title": {"startsAt": 0.8, "duration": "100ms"}, "fade-background": {"startsAt": 0.8, "endsAt": 0.9}}'>
-                <app-toolbar>
+                <app-toolbar id="navbar">
                     <h4 condensed-title>{{data.info.title}}</h4>
-                    <paper-icon-button icon="info" on-tap="_openBrandPageTap"></paper-icon-button>
                 </app-toolbar>
-                <div Main-Title>{{data.info.title}}</div>
+                <div main-title>{{data.info.title}}<br>
+                    <div sub-title>モバイル順番待ち</div>
+                </div>
             </app-header>
             <app-toolbar class="info tall layout vertical start no-align-item">
                 <div class="layout horizontal justified center">
-                    <div counter class="flex" >{{data.info.counter}}組お待ち</div>
+                    <div counter class="layout vertical">
+                        <div style="font-size: 14px;">ただいま</div>
+                        <div>
+                            <span style="font-size: 1em; color: white; background-color: deepskyblue; border-radius: 0.2em; padding: 0 8px">[[_operationCheck(data.info.operation)]]</span>
+                            <span style="margin-left: 8px;">お待ちです</span></div>
+                    </div>
                     <div class="layout horizontal center font-menu">
                         <template is="dom-if" if="[[data.info.operation]]">
                             <img src=[[resolveUrl('svg-loader-puff-green.svg')]] alt="">
-                            <sapn style="color: #76ff03;">営業中</sapn>
+                            <sapn style="color: #76ff03;">受付中</sapn>
                         </template>
                         <template is="dom-if" if="[[!data.info.operation]]">
                             <iron-icon icon="icons:warning" style="color: #fff176; margin: 6px 10px"></iron-icon>
-                            <sapn style="color: #fff176">当店は準備中です</sapn>
+                            <sapn style="color: #fff176">受付停止中</sapn>
                         </template>
                     </div>
                 </div>
-                <div sub-msg>ただいま「{{data.info.counter}}組」のお客さんはお待ちしております</div>
             </app-toolbar>
 
 
             <!-- Layout Content Part-->
             <div content>
-                <!--　簽名部分 -->
-                <iron-pages  id="signCardPages" selected="0">
+                <!--　進入簽名前介紹部分 -->
+                <iron-pages id="signCardPages" selected="0">
                     <paper-card id="signCard">
                         <div class="card-content">
-                            <p>{{data.info.content}}</p>
+                            <p hidden={{!data.info.operation}}>{{data.info.content}}</p>
+                            <p hidden={{data.info.operation}}>只今の時間、ネット登録できません。</p>
                         </div>
                         <div class="card-actions">
-                            <paper-button id="signBtn" class="indigo block" on-transitionend="_openTouchareaTap" disabled={{!data.info.operation}}>{{data.info.action_instruction}}</paper-button>
+                            <paper-button id="signBtn" class="indigo block" on-transitionend="_openTouchareaTap"
+                                          hidden={{!data.info.operation}} disabled={{!data.info.operation}}>
+                                {{data.info.action_instruction}}
+                            </paper-button>
                         </div>
                     </paper-card>
-                    <paper-card  id="signCardComplete">
+                    <paper-card id="signCardComplete">
                         <div class="card-content">
-                            <img id="signature" src$="{{data.sign.signature}}" />
-                            <p>サインは完成しました、続いて下の選択をお決めください。</p>
+                            <img id="signature" src$="{{data.sign.signature}}"/>
                         </div>
                         <div class="card-actions layout horizontal end-justified">
-                            <paper-button class="grey" on-transitionend="_signAgainTap">書き直し</paper-button>
+                            <paper-button class="grey" on-transitionend="_signAgainTap">書き直す</paper-button>
                         </div>
                     </paper-card>
                 </iron-pages>
@@ -263,21 +298,25 @@
                     },
                     submit: Function
                 },
-                signCompleteChanged: function(boolean) {
-                    if(boolean === true) {
+                signCompleteChanged: function (boolean) {
+                    if (boolean === true) {
                         this.$.signCardPages.selected = 1;
-                        this.async(function(){
+                        this.async(function () {
                             this.scroll(0, this.$.signCardPages.offsetTop - 80);
                         }, 500);
+                    }
+                },
+                _operationCheck: function(operation) {
+                    if(operation) {
+                        return this.data.info.counter + '組'
+                    } else {
+                        return ' - '
                     }
                 },
                 _openTouchareaTap: function (e) {
                     this.fire('open-toucharea');
                 },
-                _openBrandPageTap: function (e) {
-                    this.fire('open-brand-page');
-                },
-                _signAgainTap: function(e) {
+                _signAgainTap: function (e) {
                     this.set('data.sign.complete', false);
                     this.$.signCardPages.selected = 0;
 
