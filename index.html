@@ -8,8 +8,9 @@
     <meta name="theme-color" content="#ff5722">
     <meta name="msapplication-navbutton-color" content="#ff5722">
     <meta name="apple-mobile-web-app-status-bar-style" content="#ff5722">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0">
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
 
     <link rel="manifest" href="/manifest.json">
     <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
@@ -57,25 +58,31 @@
                 loading: false
             },
             info: {
-                title: 'よしのや：山崎店',　// 店名
-                operation: true, // 營業與否
-                counter: 24, // 正在排隊人數
-                content: '順番登録を開始するには、下のボタンをタップしてください。サインと質問の後に順番が表示されます。', // 商店簡介內文
-                action_instruction: '順番登録を開始する' // 簽名btn內文
+                // 店名
+                title: 'よしのや：山崎店',　
+                // 營業與否
+                operation: true,
+                // 正在排隊人數
+                counter: 24,
+                content: '登録には携帯電話の番号の入力が必要です。 順番が近付くと電話番号あてにSMSが届きます。ご自分の前にあと何人待っているかは、登録が終わった後に表示されます。時間に余裕を持って受付にお越しください。', // 商店簡介內文
+                // 簽名btn
+                action_instruction: '上記を了承して登録する'
             },
             sign:{
-                complete: false, // 簽名了沒
+                // 簽名了沒
+                complete: false,
                 width: 190,
                 height: 60,
-                // base64
-                signature: '' // 簽名data-uri
+                // base64 簽名data-uri
+                signature: ''
             },
             form: {
                 storeQuestions: [
                     {
                         question: '質問A',
                         choices: [{"id":1,"question_id":1,"index":0,"answer":"Answer 1"},{"id":2,"question_id":1,"index":1,"answer":"Answer 2"}],
-                        selected: '' // 由 radio-button-group 提供數值
+                        // 選取對象，由下方選項的 radio-button-group 提供數值
+                        selected: ''
                     },
                     {
                         question: 'しつもんB',
