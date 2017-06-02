@@ -1,0 +1,31 @@
+{
+  "name": "junban-mobilekiosk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PSEJP/junban-mobilekiosk.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PSEJP/junban-mobilekiosk/issues"
+  },
+  "homepage": "https://github.com/PSEJP/junban-mobilekiosk#readme",
+  "devDependencies": {
+    "browser-sync": "^2.16.0",
+    "gulp": "^3.9.1",
+    "gulp-htmlmin": "^3.0.0",
+    "gulp-less": "^3.1.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-vulcanize": "^6.1.0",
+    "polymer-cli": "^1.1.0"
+  },
+  "dependencies": {
+    "signature-mark": "0.0.2"
+  }
+}

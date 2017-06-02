@@ -1,4 +1,4 @@
-node_modules
+/node_modules
 dist
 .tmp
 .sass-cache
@@ -34,7 +34,6 @@ coverage
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 
 # Dependency directories
-node_modules
 jspm_packages
 
 # Optional npm cache directory

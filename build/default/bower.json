@@ -9,8 +9,7 @@
     "app-elements": "PolymerElements/app-elements#^0.10.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.22",
     "lodash": "^4.17.4",
-    "SVG-Loaders": "svg-loaders#^1.0.2",
-    "gold-phone-input": "^1.1.0"
+    "SVG-Loaders": "svg-loaders#^1.0.2"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",

@@ -24,6 +24,7 @@
     "junban-mobilekiosk-form/**/*",
     "junban-mobilekiosk-layout/**/*",
     "junban-mobilekiosk-sign/**/*",
+    "package.json",
     "bower.json"
   ]
 }
