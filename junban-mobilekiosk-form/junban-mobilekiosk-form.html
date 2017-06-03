@@ -96,10 +96,10 @@
                 <div class="card-actions">
                     <!-- TODO: type:number 資料驗證裡面不能有 - (減號) 000-1234-5678 錯誤 -->
                     <junban-mobilekiosk-form-validator id="valid1" validator-name="validator1"></junban-mobilekiosk-form-validator>
-                    <paper-input value={{data.form.userPhoneNumber}} type="number" required error-message="※携帯番号は必須です" placeholder="（必須）">
+                    <paper-input value={{data.form.userPhoneNumber}} type="number" required error-message="※携帯番号は必須です" placeholder="携帯電話番号">
                         <iron-icon icon="hardware:smartphone" prefix></iron-icon>
                     </paper-input>
-                    <paper-input value={{data.form.userPhoneNumberConfirm}} type="number" required error-message="※携帯番号は必須です" placeholder="（必須）" validator="validator1" auto-validate>
+                    <paper-input value={{data.form.userPhoneNumberConfirm}} type="number" required error-message="番号確認が一致していません。" placeholder="誤入力防止のためもう一度入力してください。" validator="validator1" auto-validate>
                         <iron-icon icon="hardware:smartphone" prefix></iron-icon>
                     </paper-input>
                 </div>
