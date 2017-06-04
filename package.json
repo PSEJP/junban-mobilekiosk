@@ -4,7 +4,8 @@
   "description": "",
   "main": "gulpfile.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/.bin/vulcanize --inline-scripts --inline-css --out-html build/junban-mobilekiosk.html ./junban-mobilekiosk/junban-mobilekiosk.html"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
     "polymer-cli": "^1.1.0"
   },
   "dependencies": {
-    "signature-mark": "0.0.2"
+    "signature-mark": "0.0.2",
+    "vulcanize": "^1.15.4"
   }
 }
