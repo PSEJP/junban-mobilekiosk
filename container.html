@@ -77,7 +77,7 @@
                 var requests = [];
 
                 requests.push(
-                    fetch('/app/kiosk/_/appStatus/', defaultFetchOptions)
+                    fetch('/app/kiosk/_/appStatus/?mobile=1', defaultFetchOptions)
                         .then(function (response) {
                             return response.json();
                         })
