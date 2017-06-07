@@ -106,6 +106,7 @@
                         })
                         .then(function (json) {
                             scope.set('data.info.messages', json);
+                            scope.set('data.info.content', json['mobile_kiosk_content'] || '');
                             scope.set('data.sign.action_instruction', json.sign);
                         })
                         .catch(handleError)
