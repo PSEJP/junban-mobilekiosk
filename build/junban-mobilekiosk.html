@@ -26088,6 +26088,10 @@ Custom property | Description | Default
 
                 mask-size: cover;
             }
+
+            .pre {
+                white-space: pre;
+            }
         </style>
         <app-header-layout id="layout">
 
@@ -26129,7 +26133,7 @@ Custom property | Description | Default
                 <iron-pages id="signCardPages" selected="0">
                     <paper-card id="signCard">
                         <div class="card-content">
-                            <p hidden="{{!data.info.operation}}">{{data.info.content}}</p>
+                            <div class="pre" hidden="{{!data.info.operation}}">{{data.info.content}}</div>
                             <p hidden="{{data.info.operation}}">現在スマホからの受付を停止しております。受付での登録をお願いいたします。</p>
                         </div>
                         <div class="card-actions">
